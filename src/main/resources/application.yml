@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    password: ${JDBC_DATABASE_PASSWORD}
+    driver-class-name: ${JDBC_DRIVER_CLASS_NAME}
+    url: ${JDBC_DATABASE_URL}
+    username: ${JDBC_DATABASE_USERNAME}
+    hikari:
+      maximum-pool-size: ${JDBC_POOL_SIZE}
+  jpa:
+    hibernate.naming.physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    show-sql: false
+
+server:
+  port: 8888
+
+
+
+mocker.uuid: a79c4bd8-d0e4-11ea-87d0-0242ac130003
