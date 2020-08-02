@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletResponse
  *  Dont override '/' path
  *
  */
+
 @CrossOrigin
 @Order(2)
 @RestController
@@ -33,7 +34,6 @@ class MockController {
     companion object {
         val log: Logger = LoggerFactory.getLogger(MockController::class.java)
         const val ROOT = "/"
-        const val MAX_SIZE = 40 //todo move to config
     }
 
     @Value("\${mocker.uuid}")
@@ -48,12 +48,7 @@ class MockController {
 
     @GetMapping("\${mocker.uuid}")
     fun getMapping(pageable: Pageable): Page<MockEntity> {
-        return repository.findAll(pageable)
-                .map {
-                    if (it.body?.length!= null && it.body?.length!! > MAX_SIZE) //todo remove body from list
-                        it.body = "${it.body!!.substring(0, MAX_SIZE)}..."
-                    else it.body; it
-                }
+        return repository.findAll(pageable).map { it.body = null; it } // todo sql wo body
     }
 
     @GetMapping("uuid")
