@@ -50,7 +50,7 @@ class MockController {
     fun getMapping(pageable: Pageable): Page<MockEntity> {
         return repository.findAll(pageable)
                 .map {
-                    if (it.body?.length!! > MAX_SIZE)
+                    if (it.body?.length!= null && it.body?.length!! > MAX_SIZE) //todo remove body from list
                         it.body = "${it.body!!.substring(0, MAX_SIZE)}..."
                     else it.body; it
                 }
@@ -67,13 +67,13 @@ class MockController {
             @RequestParam("path", required = true) path: String,
             @RequestParam("method", required = true) method: HttpMethod,
             @RequestParam("code", required = false, defaultValue = "200") code: Int? = 200,
-            @RequestBody json: String): ResponseEntity<Any> {
+            @RequestBody(required = false) json: String?): ResponseEntity<Any> {
 
         log.info("[CREATE] path: $path, method: $method, code: $code, body: $json")
         var path = path.trim()
 
-        if (path.isBlank() || ROOT == path || !path.startsWith("/") || path.count { it == '/' } < 2) {
-            return ResponseEntity.badRequest().build();
+        if (path.isBlank() || ROOT == path || !path.startsWith(ROOT) || path.count { it == ROOT[0] } < 2) {
+            return ResponseEntity.badRequest().body(mapOf("code" to "BAD_PATH", "message" to "Cant create mock methods with /* path"));
         }
 
         try {
