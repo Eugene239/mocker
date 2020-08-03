@@ -40,7 +40,7 @@
                 <div class="md-list-item" style="display: flex; align-items: center; margin-top: 1rem">
                     <a href="https://github.com/Eugene239/mocker" style="color: white">
                         <md-avatar class="md-small" style="background-color: white; margin-right: 32px"><img
-                                style="width: 20px" src="@/assets/github.svg"/></md-avatar>
+                                style="width: 20px" src="<%= BASE_URL %>github.svg"/></md-avatar>
                         Github
                     </a>
 

@@ -35,7 +35,7 @@
 
                     <md-list-item @click="menuVisible=false" class="navigation-link" style="margin-top: auto">
                         <md-avatar  class="md-small" style="background-color: white; margin-right: 32px">
-                            <img  style="width: 20px" src="@/assets/github.svg"/>
+                            <img  style="width: 20px" src="<%= BASE_URL %>github.svg"/>
                         </md-avatar>
                         <span class="md-list-item-text">
                             <a href="https://github.com/Eugene239/mocker" style="color: white" >Github</a>
@@ -44,7 +44,7 @@
                 </md-list>
             </md-app-drawer>
 
-            <md-app-content style="position: relative; ">
+            <md-app-content class="mocker__page" >
                 <div v-if="loading"
                      style="position: absolute; top: 0; left: 0; right: 0;  margin: 0; padding: 0; overflow: hidden">
                     <md-progress-bar class="md-accent" md-mode="indeterminate"></md-progress-bar>
