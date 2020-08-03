@@ -1,13 +1,5 @@
-const path = require("path");
-
 module.exports = {
-    // chainWebpack: (config) => {
-    //     config.module
-    //         .rule('images')
-    //         .use('url-loader')
-    //         .tap(options => Object.assign({}, options, { name: '[name].[ext]' }));
-    // },
-    outputDir: '../',
+    outputDir: '../src/main/resources/static',
     css: {
         extract: {
             filename: '[name]-[hash].css',
