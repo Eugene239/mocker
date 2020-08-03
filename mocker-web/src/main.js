@@ -3,6 +3,8 @@ import Vuex from 'vuex'
 import App from './App.vue'
 import VueMaterial from 'vue-material'
 import VueRouter from 'vue-router'
+import Vuelidate from 'vuelidate'
+
 import 'vue-material/dist/vue-material.min.css'
 import 'vue-material/dist/theme/default-dark.css'
 // import 'vue-material/dist/theme/default.css'
@@ -11,6 +13,7 @@ Vue.config.productionTip = false
 Vue.use(VueMaterial)
 Vue.use(Vuex);
 Vue.use(VueRouter)
+Vue.use(Vuelidate)
 
 import Create from './components/Create'
 import MockList from './components/MockList'
@@ -38,7 +41,8 @@ var Store = new Vuex.Store({
       POST: '#e6a147',
       DELETE: '#e03d3d',
       PUT: '#3f87eb'
-    }
+    },
+    methods: ['GET', 'POST', 'DELETE', 'PUT']
   },
   mutations: {
     setLoading(state, value) {

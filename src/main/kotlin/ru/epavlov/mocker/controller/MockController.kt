@@ -38,6 +38,8 @@ class MockController {
 
     @Value("\${mocker.uuid}")
     lateinit var uuid: String
+    @Value("\${mocker.path.regex}")
+    lateinit var  regex: String;
 
 
     @Autowired
@@ -67,8 +69,8 @@ class MockController {
         log.info("[CREATE] path: $path, method: $method, code: $code, body: $json")
         var path = path.trim()
 
-        if (path.isBlank() || ROOT == path || !path.startsWith(ROOT) || path.count { it == ROOT[0] } < 2) {
-            return ResponseEntity.badRequest().body(mapOf("code" to "BAD_PATH", "message" to "Cant create mock methods with /* path"));
+        if (!regex.toRegex().matches(path)){
+            return ResponseEntity.badRequest().body(mapOf("code" to "BAD_PATH", "message" to "Cant create mock method, PATH invalid"));
         }
 
         try {

@@ -1,6 +1,6 @@
 <template>
-    <div class="page-container" >
-        <md-app >
+    <div class="page-container">
+        <md-app>
             <md-app-toolbar class="md-primary">
                 <md-button class="md-icon-button" @click="menuVisible = !menuVisible">
                     <md-icon>menu</md-icon>
@@ -8,12 +8,14 @@
                 <span class="md-title">Mocker</span>
 
                 <md-button style="margin-left: auto" @click="refresh()">
-                    <md-icon  >refresh</md-icon>
+                    <md-icon>refresh</md-icon>
                 </md-button>
             </md-app-toolbar>
 
             <md-app-drawer :md-active.sync="menuVisible">
-                <md-toolbar class="md-transparent" md-elevation="0">Navigation</md-toolbar>
+                <md-toolbar class="md-transparent" md-elevation="0">
+                    <span class="md-title"> Mocker</span>
+                </md-toolbar>
 
                 <md-list>
                     <md-list-item @click="menuVisible=false" class="navigation-link" to="/info">
@@ -29,6 +31,15 @@
                     <md-list-item @click="menuVisible=false" class="navigation-link" to="/list">
                         <md-icon>list</md-icon>
                         <span class="md-list-item-text ">List</span>
+                    </md-list-item>
+
+                    <md-list-item @click="menuVisible=false" class="navigation-link" style="margin-top: auto">
+                        <md-avatar  class="md-small" style="background-color: white; margin-right: 32px">
+                            <img  style="width: 20px" src="@/assets/github.svg"/>
+                        </md-avatar>
+                        <span class="md-list-item-text">
+                            <a href="https://github.com/Eugene239/mocker" style="color: white" >Github</a>
+                        </span>
                     </md-list-item>
                 </md-list>
             </md-app-drawer>
@@ -57,15 +68,22 @@
     .md-drawer {
         width: 230px;
         max-width: calc(100vw - 125px);
+        display: flex;
+        flex-direction: column;
     }
+    .md-drawer .md-list{
+        flex: 1;
+    }
+
     .md-content.md-app-content {
         background-color: #212121;
     }
+
     .md-app-container {
         height: 100%;
     }
-    .navigation-link .md-list-item-text{
-      color:white !important;
+    .navigation-link .md-list-item-text {
+        color: white !important;
     }
 </style>
 
@@ -78,7 +96,7 @@
             this.loadInfo();
         },
         computed: {
-            loading () {
+            loading() {
                 return this.$store.state.loading;
             }
         },
@@ -104,7 +122,7 @@
                     )
                 }
             },
-            refresh: ()=>{
+            refresh: () => {
                 console.log('refresh');
                 window.location.reload();
             }

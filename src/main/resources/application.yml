@@ -15,4 +15,7 @@ server:
 
 
 
-mocker.uuid: a79c4bd8-d0e4-11ea-87d0-0242ac130003
+mocker:
+  uuid: a79c4bd8-d0e4-11ea-87d0-0242ac130003
+  path:
+    regex: \/\S+\/\S+

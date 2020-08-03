@@ -1,6 +1,6 @@
 <template>
     <div>
-        <md-table class="md-card" style="padding-bottom: 1rem">
+        <md-table class="md-card md-small-size-100 md-small-p-1"  style="padding-bottom: 1rem">
             <md-table-toolbar>
                 <h1 class="md-title">Mock List</h1>
                 <div style="display: flex">
@@ -19,19 +19,18 @@
             <md-table-row>
                 <md-table-head>METHOD</md-table-head>
                 <md-table-head>PATH</md-table-head>
-                <md-table-head md-numeric>CODE</md-table-head>
-                <md-table-head>BODY</md-table-head>
-                <md-table-head></md-table-head>
+                <md-table-head class="md-small-hide">CODE</md-table-head>
+                <md-table-head class="md-small-hide">CREATED</md-table-head>
             </md-table-row>
 
             <md-table-row v-for="mock in mocks" v-bind:key="hashf(mock)" style="cursor: pointer">
                 <md-table-cell :style="mockStyle(mock)">{{mock.method}}</md-table-cell>
-                <md-table-cell>{{mock.path}}</md-table-cell>
-                <md-table-cell md-numeric>{{mock.code}}</md-table-cell>
-                <md-table-cell>{{pretty(mock.body)}}</md-table-cell>
-                <md-table-cell>
-                    <md-icon>trash</md-icon>
-                </md-table-cell>
+                <md-table-cell class="mocker-path">{{mock.path}}</md-table-cell>
+                <md-table-cell class="md-small-hide" >{{mock.code}}</md-table-cell>
+                <md-table-cell class="md-small-hide">{{formatDate(mock.created)}}</md-table-cell>
+<!--                <md-table-cell>-->
+<!--                    <md-icon>trash</md-icon>-->
+<!--                </md-table-cell>-->
             </md-table-row>
             <md-button class="md-icon-button md-raised md-fab md-accent"
                        style="z-index: 0; right: -1.5rem; bottom: -1.5rem; position: absolute" to="/create">
@@ -46,6 +45,7 @@
 </template>
 
 <script>
+    //todo transform to card for adaptive
     var hash = require('object-hash');
 
     import MOCK_API from '@/api/MOCK_API'
@@ -99,9 +99,9 @@
                     )
                 }
             },
-            pretty: function (value) {
-                return value
-            },
+            // pretty: function (value) {
+            //     return value
+            // },
             mockStyle: function (mock) {
                 return 'color: ' + this.$store.state.colors[mock.method];
             },
@@ -111,6 +111,11 @@
                     this.page = value;
                 }
             },
+            formatDate: function(date){
+                if (!date ) return '';
+                if (date.indexOf('T') === -1) return date;
+                return date.split('T')[0];
+            },
             hashf(object) {
                 return hash(object);
             }
@@ -118,6 +123,10 @@
     }
 </script>
 
-<style scoped>
-
+<style >
+    .mocker-path .md-table-cell-container{
+        text-overflow: ellipsis;
+        max-width: 40vw;
+        overflow: hidden;
+    }
 </style>
