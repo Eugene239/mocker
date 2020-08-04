@@ -18,13 +18,15 @@ Vue.use(Vuelidate)
 import Create from './components/Create'
 import MockList from './components/MockList'
 import Info from "./components/Info";
+// import MockDialog from "./components/MockDialog";
 
 
 const routes = [
   { path: '/', redirect: '/info' },
   { path: '/info', component: Info },
   { path: '/create', component: Create },
-  { path: '/list', component: MockList }
+  { path: '/list', component: MockList },
+  // { path: '/test', component: MockDialog }
 ]
 
 const router = new VueRouter({

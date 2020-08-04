@@ -38,38 +38,20 @@
             </md-button>
         </md-table>
         <!--        <md-button style="position: absolute; right: 0; bottom: 0; z-index: 0">-->
-
-
-        <!--        </md-button>-->
-        <md-dialog :md-active.sync="showDialog" v-if="selectedMock">
-            <md-dialog-title class="mocker__dialog" >
-                <div class="mocker__dialog-title">
-                    <span :style="mockStyle(selectedMock)">{{selectedMock.method}}</span>
-                    <span style="padding-left: 1rem">{{selectedMock.code}}</span>
-                </div>
-                <div class="mocker__dialog-title"> {{selectedMock.path}}</div>
-            </md-dialog-title>
-            <md-divider></md-divider>
-            <div class=" mocker__dialog-body">
-                <div class="md-title">Body</div>
-                <div class="md-title">TBD</div>
-            </div>
-            <div>{{selectedMock.body}}</div>
-            <md-dialog-actions>
-                <md-button class="md-primary" @click="showDialog = false">Close</md-button>
-            </md-dialog-actions>
-        </md-dialog>
+        <MockDialog  :mock="selectedMock"></MockDialog>
     </div>
 </template>
 
 <script>
     //todo transform to card for adaptive
+    import MockDialog from "./MockDialog";
     var hash = require('object-hash');
 
     import MOCK_API from '@/api/MOCK_API'
 
     export default {
         name: "MockList",
+        components: {MockDialog},
         mounted() {
             this.loadMocks();
         },
@@ -92,7 +74,6 @@
             last: true,
             loading: false,
             mocks: [],
-            showDialog: false,
             selectedMock: null
         }),
         methods: {
@@ -140,9 +121,9 @@
                 return hash(object);
             },
             showMock(mock) {
-                console.log(mock);
+                console.log('[MockList]showMock:',mock);
                 this.selectedMock = mock;
-                this.showDialog = true;
+                //this.showDialog = true;
 
             }
         }

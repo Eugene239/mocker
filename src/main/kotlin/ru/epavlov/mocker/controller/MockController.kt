@@ -27,7 +27,11 @@ import javax.servlet.http.HttpServletResponse
  *
  */
 
-@CrossOrigin
+@CrossOrigin(
+        origins = ["*"],
+        allowedHeaders = ["*"],
+        methods = [RequestMethod.GET, RequestMethod.PUT, RequestMethod.POST, RequestMethod.DELETE]
+)
 @Order(2)
 @RestController
 class MockController {

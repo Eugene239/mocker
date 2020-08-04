@@ -106,12 +106,17 @@
         for (let i = 449; i <= 451; i++) {
             codes.push(i);
         }
-        codes.push('499');
+        codes.push(499);
         for (let i = 500; i <= 511; i++) {
             codes.push(i);
         }
         for (let i = 520; i <= 526; i++) {
             codes.push(i);
+        }
+        try {
+            value = parseInt(value);
+        }catch (e) {
+            return false
         }
         return codes.indexOf(value) !== -1;
     }
@@ -141,7 +146,7 @@
             methods: [],
             mockSaved: false,
             loading: false,
-            lastMock: null
+            lastMock: null,
         }),
         validations: {
             form: {
