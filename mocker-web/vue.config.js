@@ -1,4 +1,5 @@
 module.exports = {
+
     outputDir: '../src/main/resources/static',
     css: {
         extract: {
@@ -6,12 +7,12 @@ module.exports = {
             chunkFilename: '[name].css',
         },
     },
+
     configureWebpack: {
         output: {
-
             filename: '[name]-[hash].js',
             chunkFilename: '[name].js',
         }
-    },
-    assetsDir: ''
+    }
+
 }

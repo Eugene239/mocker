@@ -35,7 +35,7 @@
 
                     <md-list-item @click="menuVisible=false" class="navigation-link" style="margin-top: auto">
                         <md-avatar  class="md-small" style="background-color: white; margin-right: 32px">
-                            <img  style="width: 20px" src="<%= BASE_URL %>github.svg"/>
+                            <img  style="width: 20px" src="github.svg"/>
                         </md-avatar>
                         <span class="md-list-item-text">
                             <a href="https://github.com/Eugene239/mocker" style="color: white" >Github</a>
@@ -102,7 +102,7 @@
         },
         data: () => ({
             menuVisible: false,
-            env: process.env.VUE_APP_BACKEND
+            env: process.env.VUE_APP_BACKEND,
         }),
         methods: {
             loadInfo: function () {
