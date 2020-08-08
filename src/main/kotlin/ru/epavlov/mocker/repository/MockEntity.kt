@@ -6,7 +6,7 @@ import javax.persistence.*
 @Table(name = "MOCK")
 @Entity
 @IdClass(MockEntityId::class)
-class MockEntity(
+data class MockEntity(
         @Id
         @Column(name = "PATH")
         var path: String? = null,

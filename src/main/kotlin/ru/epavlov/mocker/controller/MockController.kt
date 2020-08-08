@@ -1,23 +1,21 @@
 package ru.epavlov.mocker.controller
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import org.apache.tomcat.util.json.JSONParser
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.core.annotation.Order
+import org.springframework.core.env.Environment
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import org.springframework.web.servlet.ModelAndView
 import ru.epavlov.mocker.repository.MockEntity
 import ru.epavlov.mocker.repository.MockEntityId
 import ru.epavlov.mocker.repository.MockRepository
-import java.io.InputStreamReader
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
@@ -47,10 +45,15 @@ class MockController {
 
 
     @Autowired
-    lateinit var repository: MockRepository;
+    lateinit var repository: MockRepository
 
     @Autowired
-    lateinit var mapper: ObjectMapper
+    lateinit var env: Environment
+
+
+
+//    @Autowired
+//    lateinit var mapper: ObjectMapper
 
     @GetMapping("\${mocker.uuid}")
     fun getMapping(pageable: Pageable): Page<MockEntity> {
