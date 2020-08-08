@@ -1,6 +1,6 @@
 <template>
     <div>
-        <form novalidate class="md-layout" @submit.prevent="validateMock" style="margin-top: 2rem">
+        <form novalidate class="md-layout mocker__form" @submit.prevent="validateMock"  >
             <md-card class="md-layout-item md-size-50 md-small-size-100" style="margin: auto;">
                 <md-card-header style="display: flex">
                     <div class="md-title">Create Mock</div>

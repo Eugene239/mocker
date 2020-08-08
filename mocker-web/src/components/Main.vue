@@ -12,12 +12,9 @@
                 </md-button>
             </md-app-toolbar>
 
-            <md-app-drawer :md-active.sync="menuVisible">
-                <md-toolbar class="md-transparent" md-elevation="0">
-                    <span class="md-title"> Mocker</span>
-                </md-toolbar>
-
+            <md-app-drawer :md-active.sync="menuVisible" >
                 <md-list>
+                    <md-subheader>Mocker</md-subheader>
                     <md-list-item @click="menuVisible=false" class="navigation-link" to="/info">
                         <md-icon>info</md-icon>
                         <span class="md-list-item-text "> Info </span>
@@ -32,8 +29,9 @@
                         <md-icon>list</md-icon>
                         <span class="md-list-item-text ">List</span>
                     </md-list-item>
-
-                    <md-list-item @click="menuVisible=false" class="navigation-link" style="margin-top: auto">
+                    <md-divider style="margin-top: 1rem;"></md-divider>
+                    <md-subheader>Source</md-subheader>
+                    <md-list-item @click="menuVisible=false" class="navigation-link" >
                         <md-avatar  class="md-small" style="background-color: white; margin-right: 32px">
                             <img  style="width: 20px" src="github.svg"/>
                         </md-avatar>
@@ -45,11 +43,10 @@
             </md-app-drawer>
 
             <md-app-content class="mocker__page" >
-                <div v-if="loading"
-                     style="position: absolute; top: 0; left: 0; right: 0;  margin: 0; padding: 0; overflow: hidden">
+                <div v-if="loading" class="mocker__loading">
                     <md-progress-bar class="md-accent" md-mode="indeterminate"></md-progress-bar>
                 </div>
-                <router-view v-if="this.$store.state.uuid"></router-view>
+                <router-view class="mocker__router-content" v-if="this.$store.state.uuid"></router-view>
             </md-app-content>
         </md-app>
     </div>
