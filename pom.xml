@@ -18,7 +18,7 @@
         <java.version>1.8</java.version>
         <kotlin.version>1.3.72</kotlin.version>
     </properties>
-
+    <!-- todo add more db and check -->
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -67,7 +67,6 @@
 
     <build>
         <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
-        <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
