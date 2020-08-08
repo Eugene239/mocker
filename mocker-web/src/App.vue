@@ -58,6 +58,10 @@
 
     .mocker__dialog-body {
         padding: 1rem;
+        flex: 1;
+    }
+    .mocker__dialog-response-field{
+        height: 95%;
     }
 
     .mocker__loading {

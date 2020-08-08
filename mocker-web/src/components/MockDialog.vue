@@ -1,6 +1,6 @@
 <template>
-    <md-dialog v-if="mock" :md-active.sync="show">
-        <md-dialog-title class="mocker__dialog">
+    <md-dialog v-if="mock" :md-active.sync="show" class="mocker__dialog">
+        <md-dialog-title >
             <div class="mocker__dialog-title">
                 <span :style="mockStyle()">{{mock.method}}</span>
                 <span style="padding-left: 1rem">{{mock.code}}</span>
@@ -13,8 +13,8 @@
         </div>
         <div class=" mocker__dialog-body">
             <div class="md-title" style="margin-bottom: 1rem">Body</div>
-            <md-field>
-                <md-textarea v-model="mock.body" required  class="mocker__dialog-response-body" disabled></md-textarea>
+            <md-field class="mocker__dialog-response-field ">
+                <md-textarea v-model="mock.body" required  class="mocker__dialog-response-body md-scrollbar" disabled></md-textarea>
             </md-field>
         </div>
         <md-dialog-actions>
@@ -37,29 +37,14 @@
                     this.loadMock();
                 }
             }
-
-            //     (newOne, oldOne) => {
-
-            //     if (newOne) {
-            //         this.show = true;
-            //         this.loadMock();
-            //     }
-            // }
         },
         data: () => ({
-            // mock: {
-            //     method: "POST",
-            //     code: 200,
-            //     path: "/api/post",
-            //     body: null
-            // },
+
             env: process.env.VUE_APP_BACKEND,
             loading: false,
             show: false
-            //showDialog: true
         }),
         mounted() {
-            //  this.loadMock();
         },
         methods: {
             mockStyle() {
