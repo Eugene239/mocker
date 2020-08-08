@@ -1,3 +1,30 @@
+# Mocker
+## OpenSource mock server
+Mock Rest API before backend is done, use common https://mocker.badsoft.ml or dedicate instance 
+# Run options
+## Checked DBs
+ - Mysql
+ - H2
+## Required Params
+Set this params for dedicate use with your DB
+````
+JDBC_DATABASE_PASSWORD
+JDBC_DRIVER_CLASS_NAME
+JDBC_DATABASE_URL
+JDBC_DATABASE_USERNAME
+JDBC_POOL_SIZE
+````
+Add ``hibernate.hbm2ddl.auto = update`` auto creating table in DB
+## Local run with H2 in memory db
+````
+JDBC_DATABASE_PASSWORD = password
+JDBC_DRIVER_CLASS_NAME = org.h2.Driver
+JDBC_DATABASE_URL = jdbc:h2:mem:testdb
+JDBC_DATABASE_USERNAME = sa
+JDBC_POOL_SIZE = 1
+hibernate.hbm2ddl.auto = update
+````
+# Database schema
 ````
 create table MOCK
 (
