@@ -1,0 +1,23 @@
+# docker-compose file example for Mocker
+version: "2.1"
+services:
+  mocker:
+    image: mocker:latest
+    hostname: mocker
+    build:
+      context: .
+    restart: always
+#    environment:
+#      - SERVER.PORT=  TODO
+#      - JDBC_DATABASE_PASSWORD=  TODO
+#      - JDBC_DRIVER_CLASS_NAME=  TODO
+#      - JDBC_DATABASE_URL=  TODO
+#      - JDBC_DATABASE_USERNAME=  TODO
+#      - JDBC_POOL_SIZE=  TODO
+#      - TZ=  TODO
+    healthcheck:
+      test: exit 0
+    networks:
+      default:
+        aliases:
+          - mocker

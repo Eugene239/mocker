@@ -1,7 +1,20 @@
 # Mocker
 ## OpenSource mock server
 Mock Rest API before backend is done, use common https://mocker.badsoft.ml or dedicate instance 
+## Build
+````
+mvn install
+````
+## Docker build
+see docker dir
+- Dockerfile - to build
+- docker-compose - setting example 
+
 # Run options
+## Run
+````
+java -jar target/mocker.jar
+````
 ## Checked DBs
  - Mysql
  - H2
