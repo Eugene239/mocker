@@ -68,13 +68,13 @@ class MockController {
 
     @PostMapping("\${mocker.uuid}")
     fun create(
-            @RequestParam("path", required = true) path: String,
+            @RequestParam("path", required = true) _path: String,
             @RequestParam("method", required = true) method: HttpMethod,
             @RequestParam("code", required = false, defaultValue = "200") code: Int? = 200,
             @RequestBody(required = false) json: String?): ResponseEntity<Any> {
 
-        log.info("[CREATE] path: $path, method: $method, code: $code, body: $json")
-        var path = path.trim()
+        log.info("[CREATE] path: $_path, method: $method, code: $code, body: $json")
+        val path = _path.trim().toLowerCase()
 
         if (!regex.toRegex().matches(path)){
             return ResponseEntity.badRequest().body(mapOf("code" to "BAD_PATH", "message" to "Cant create mock method, PATH invalid"));
@@ -84,7 +84,7 @@ class MockController {
             repository.save(MockEntity(
                     path = path,
                     code = code,
-                    method = method.name,
+                    method = method.name.toUpperCase(),
                     body = json
             ))
         } catch (e: Exception) {
@@ -102,7 +102,7 @@ class MockController {
             response: HttpServletResponse
     ): ResponseEntity<Any> {
         log.info("[REQUEST] path=${request.requestURI}  method=${request.method} ")
-        val mock = repository.findById(MockEntityId(request.requestURI, request.method)).orElse(null)
+        val mock = repository.findById(MockEntityId(request.requestURI.toLowerCase(), request.method.toUpperCase())).orElse(null)
         log.info("[RESPONSE] mock: $mock ")
 
 
