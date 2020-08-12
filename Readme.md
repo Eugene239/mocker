@@ -5,11 +5,12 @@ Mock Rest API before backend is done, use common https://mocker.badsoft.ml or de
 ````
 mvn install
 ````
-## Docker build
-see docker dir
+## Docker
+### link
+https://hub.docker.com/repository/docker/eupavlov/mocker
+### Docker build
 - Dockerfile - to build
 - docker-compose - setting example 
-
 # Run options
 ## Run
 ````
