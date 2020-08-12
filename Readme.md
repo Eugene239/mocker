@@ -3,7 +3,7 @@
 Mock Rest API before backend is done, use common https://mocker.badsoft.ml or dedicate instance 
 ## Build
 ````
-mvn install
+mvn clean package
 ````
 ## Docker
 ### link
