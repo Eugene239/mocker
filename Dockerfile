@@ -1,3 +1,3 @@
 FROM adoptopenjdk/openjdk11:alpine-jre
-COPY ../target/mocker.jar app.jar
+COPY target/mocker.jar app.jar
 ENTRYPOINT ["java","-jar","/app.jar"]
