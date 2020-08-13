@@ -14,7 +14,7 @@
             </h1>
             <div class="md-body-1">
                 Create new mocks via site page or any http client<br>
-                <pre><code>curl --location --request POST 'https://mocker.badsoft.ml?path=/api/post&code=200&method=POST' \
+                <pre><code>curl --location --request POST 'https://mocker.badsoft.ml/a79c4bd8-d0e4-11ea-87d0-0242ac130003?path=/api/post&code=200&method=POST' \
 --header 'Content-Type: application/json' \
 --data-raw '{
 "hello": "world"

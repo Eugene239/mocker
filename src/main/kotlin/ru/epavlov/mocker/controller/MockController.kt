@@ -1,5 +1,6 @@
 package ru.epavlov.mocker.controller
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.apache.tomcat.util.json.JSONParser
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -40,8 +41,12 @@ class MockController {
 
     @Value("\${mocker.uuid}")
     lateinit var uuid: String
+
     @Value("\${mocker.path.regex}")
-    lateinit var  regex: String;
+    lateinit var regex: String;
+
+    @Value("\${mocker.methods}")
+    lateinit var methods: List<String>
 
 
     @Autowired
@@ -51,9 +56,8 @@ class MockController {
     lateinit var env: Environment
 
 
-
-//    @Autowired
-//    lateinit var mapper: ObjectMapper
+    @Autowired
+    lateinit var mapper: ObjectMapper
 
     @GetMapping("\${mocker.uuid}")
     fun getMapping(pageable: Pageable): Page<MockEntity> {
@@ -73,14 +77,26 @@ class MockController {
             @RequestParam("code", required = false, defaultValue = "200") code: Int? = 200,
             @RequestBody(required = false) json: String?): ResponseEntity<Any> {
 
-        log.info("[CREATE] path: $_path, method: $method, code: $code, body: $json")
+        if (log.isDebugEnabled) log.debug("[CREATE] path: $_path, method: $method, code: $code, body: $json")
         val path = _path.trim().toLowerCase()
 
-        if (!regex.toRegex().matches(path)){
+        if (!regex.toRegex().matches(path)) {
             return ResponseEntity.badRequest().body(mapOf("code" to "BAD_PATH", "message" to "Cant create mock method, PATH invalid"));
         }
+        if (!methods.contains(method.name)) {
+            return ResponseEntity.badRequest().body(mapOf("code" to "BAD_METHOD", "message" to "Cant create mock method, METHOD invalid"));
+        }
+        if (HttpStatus.resolve(code!!) == null) {
+            return ResponseEntity.badRequest().body(mapOf("code" to "BAD_CODE", "message" to "Cant create mock method, CODE invalid"));
+        }
+
 
         try {
+            //validate json
+            json?.let {
+                mapper.readTree(json)
+            }
+
             repository.save(MockEntity(
                     path = path,
                     code = code,
@@ -101,9 +117,9 @@ class MockController {
             request: HttpServletRequest,
             response: HttpServletResponse
     ): ResponseEntity<Any> {
-        log.info("[REQUEST] path=${request.requestURI}  method=${request.method} ")
+        if (log.isDebugEnabled) log.debug("[REQUEST] path=${request.requestURI}  method=${request.method} ")
         val mock = repository.findById(MockEntityId(request.requestURI.toLowerCase(), request.method.toUpperCase())).orElse(null)
-        log.info("[RESPONSE] mock: $mock ")
+        if (log.isDebugEnabled) log.debug("[RESPONSE] mock: $mock ")
 
 
         return if (mock == null) {
