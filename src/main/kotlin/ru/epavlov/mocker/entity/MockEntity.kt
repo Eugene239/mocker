@@ -21,8 +21,8 @@ class MockEntity(
 
         @Id
         @Column(name = ID)
-        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "shopping_list_sequence")
-        @SequenceGenerator(name = "shopping_list_sequence", sequenceName = "shopping_list_sequence", allocationSize = 1)
+        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQUENCE_NAME)
+        @SequenceGenerator(name = SEQUENCE_NAME, sequenceName = SEQUENCE_NAME, allocationSize = 1)
         val id: Long? = null,
 
         @NotNull
@@ -32,6 +32,18 @@ class MockEntity(
         @NotNull
         @Column(name = METHOD)
         val method: HttpMethod? = null,
+
+        @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+        @JoinColumn(name = MockParam.MOCK_ID)
+        val mockParams: MutableList<MockParam>? = mutableListOf(),
+
+        @ManyToMany(cascade = [CascadeType.ALL])
+        @JoinTable(
+                name = MockParam.TABLE_NAME,
+                joinColumns = [JoinColumn(name=MockParam.MOCK_ID)],
+                inverseJoinColumns = [JoinColumn(name=Param.ID)]
+        )
+        val params: MutableList<Param>? = mutableListOf(),
 
         @CreatedDate
         @Temporal(TemporalType.TIMESTAMP)
@@ -45,30 +57,7 @@ class MockEntity(
         const val METHOD = "METHOD"
         const val PATH = "PATH"
         const val ID = "ID"
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as MockEntity
-
-        if (id != other.id) return false
-        if (path != other.path) return false
-        if (method != other.method) return false
-        if (created != other.created) return false
-        if (updated != other.updated) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = id?.hashCode() ?: 0
-        result = 31 * result + (path?.hashCode() ?: 0)
-        result = 31 * result + (method?.hashCode() ?: 0)
-        result = 31 * result + (created?.hashCode() ?: 0)
-        result = 31 * result + (updated?.hashCode() ?: 0)
-        return result
+        const val SEQUENCE_NAME = "mock_sequence"
     }
 
     override fun toString(): String {

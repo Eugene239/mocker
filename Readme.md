@@ -17,11 +17,11 @@ https://hub.docker.com/repository/docker/eupavlov/mocker
 java -jar target/mocker.jar
 ````
 ## Checked DBs
-|DB|Driver|
-|---|---|
-|Mysql|com.mysql.cj.jdbc.Driver|
-|H2|org.h2.Driver|
-|PostgreSQL|org.postgresql.Driver| 
+|DB|Driver|Checked|
+|---|---|---|
+|Mysql|com.mysql.cj.jdbc.Driver|❌|
+|H2|org.h2.Driver|✔|
+|PostgreSQL|org.postgresql.Driver|❌|
 ## Required Params
 Set this params for dedicate use with your DB
 ````
