@@ -1,23 +1,22 @@
 package ru.epavlov.mocker.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.apache.tomcat.util.json.JSONParser
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.core.annotation.Order
 import org.springframework.core.env.Environment
-import org.springframework.data.domain.Page
-import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.CrossOrigin
+import org.springframework.web.bind.annotation.RequestMethod
+import org.springframework.web.bind.annotation.RestController
 import ru.epavlov.mocker.entity.MockEntity
+import ru.epavlov.mocker.entity.MockResponse
+import ru.epavlov.mocker.entity.Param
 import ru.epavlov.mocker.repository.MockRepository
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
+import javax.annotation.PostConstruct
 
 /**
  *       !WARNING!
@@ -57,6 +56,41 @@ class MockController {
 
     @Autowired
     lateinit var mapper: ObjectMapper
+
+    @PostConstruct
+    fun addMock(){
+        val mock = MockEntity(
+                "/test/path",
+                HttpMethod.POST
+        )
+
+        val param = Param(
+                //type = ParamType.QUERY_PARAM,
+                //name = "sessionId",
+                //value = "'3123-3123123-3123'"
+
+        ).apply { this.response = MockResponse(
+                code = HttpStatus.NOT_FOUND,
+                delay = 1000,
+                body = "hello"
+        ) }
+
+        mock.params.add(param)
+        var result = repository.save(mock)
+        log.info("result $result")
+        log.info("params: ${result.params}")
+//        result.params!!.forEach {
+//            assert(it.mockId!=null)
+//        }
+        result.params.add(Param().apply { this.response= MockResponse(
+                code = HttpStatus.CREATED,
+                delay = 0,
+                body = "retard"
+        ) })
+        result = repository.save(result)
+        log.info("result $result")
+        log.info("params: ${result.params}")
+    }
 
 //    @GetMapping("\${mocker.uuid}")
 //    fun getMapping(pageable: Pageable): Page<MockEntity> {

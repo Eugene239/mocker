@@ -10,12 +10,13 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpMethod
+import org.springframework.http.HttpStatus
 import org.springframework.test.context.ActiveProfiles
 import ru.epavlov.mocker.MockerApplication
+import ru.epavlov.mocker.controller.MockController
 import ru.epavlov.mocker.entity.MockEntity
-import ru.epavlov.mocker.entity.MockParam
+import ru.epavlov.mocker.entity.MockResponse
 import ru.epavlov.mocker.entity.Param
-import ru.epavlov.mocker.entity.ParamType
 
 @SpringBootTest(classes = [MockerApplication::class])
 @ActiveProfiles(profiles = ["test"])
@@ -39,8 +40,8 @@ class MockRepositoryTest {
     @DisplayName("Check create in DB")
     fun checkCreate() {
         val result = repository.save(MockEntity(
-                path = "/test/path",
-                method = HttpMethod.GET
+                "/test/path",
+                HttpMethod.GET
         ))
         log.info("create result: $result")
         assert(result.id != null)
@@ -53,16 +54,16 @@ class MockRepositoryTest {
     @DisplayName("Check unique constraint")
     fun checkUnique() {
         val mock1 = MockEntity(
-                path = "/test/path",
-                method = HttpMethod.GET
+                "/test/path",
+                HttpMethod.GET
         )
         val mock2 = MockEntity(
-                path = "/test/path2",
-                method = HttpMethod.POST
+                "/test/path2",
+                HttpMethod.POST
         )
         val mock3 = MockEntity(
-                path = mock1.path,
-                method = HttpMethod.DELETE
+                mock1.path,
+                HttpMethod.DELETE
         )
         repository.save(mock1)
         repository.save(mock2)
@@ -72,8 +73,8 @@ class MockRepositoryTest {
         //check throws cause of unique constraint
         assertThrows<DataIntegrityViolationException> {
             repository.save(MockEntity(
-                    path = mock1.path,
-                    method = mock1.method
+                    mock1.path,
+                    mock1.method
             ))
         }
         log.info("result: ${repository.findAll()}")
@@ -81,23 +82,38 @@ class MockRepositoryTest {
 
     @Test
     @DisplayName("Create mock full data")
-    fun createFull(){
+    fun createFull() {
         val mock = MockEntity(
-                path = "/test/path",
-                method = HttpMethod.POST
+                "/test/path",
+                HttpMethod.POST
         )
 
         val param = Param(
-                type = ParamType.QUERY_PARAM,
-                name = "sessionId",
-                value = "'3123-3123123-3123'"
-        )
+                //type = ParamType.QUERY_PARAM,
+                //name = "sessionId",
+                //value = "'3123-3123123-3123'"
 
-        mock.params!!.add(param)
-        val result  = repository.save(mock)
-        log.info("result $result")
-        log.info("params: ${result.params}")
-        log.info("mockParams: ${result.mockParams}")
+        ).apply { this.response = MockResponse(
+                code = HttpStatus.NOT_FOUND,
+                delay = 1000,
+                body = "hello"
+        ) }
+
+        mock.params.add(param)
+        var result = repository.save(mock)
+        MockController.log.info("result $result")
+        MockController.log.info("params: ${result.params}")
+//        result.params!!.forEach {
+//            assert(it.mockId!=null)
+//        }
+        result.params.add(Param().apply { this.response= MockResponse(
+                code = HttpStatus.CREATED,
+                delay = 0,
+                body = "retard"
+        ) })
+        result = repository.save(result)
+        MockController.log.info("result $result")
+        MockController.log.info("params: ${result.params}")
     }
 
 
