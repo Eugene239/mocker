@@ -32,6 +32,8 @@ import javax.annotation.PostConstruct
 @Order(2)
 @RestController
 class MockController {
+    //todo add swagger?
+
     companion object {
         val log: Logger = LoggerFactory.getLogger(MockController::class.java)
         const val ROOT = "/"
@@ -48,49 +50,13 @@ class MockController {
 
 
     @Autowired
-    lateinit var repository: MockRepository
-
-    @Autowired
     lateinit var env: Environment
 
 
     @Autowired
     lateinit var mapper: ObjectMapper
 
-    @PostConstruct
-    fun addMock(){
-        val mock = MockEntity(
-                "/test/path",
-                HttpMethod.POST
-        )
 
-        val param = Param(
-                //type = ParamType.QUERY_PARAM,
-                //name = "sessionId",
-                //value = "'3123-3123123-3123'"
-
-        ).apply { this.response = MockResponse(
-                code = HttpStatus.NOT_FOUND,
-                delay = 1000,
-                body = "hello"
-        ) }
-
-        mock.params.add(param)
-        var result = repository.save(mock)
-        log.info("result $result")
-        log.info("params: ${result.params}")
-//        result.params!!.forEach {
-//            assert(it.mockId!=null)
-//        }
-        result.params.add(Param().apply { this.response= MockResponse(
-                code = HttpStatus.CREATED,
-                delay = 0,
-                body = "retard"
-        ) })
-        result = repository.save(result)
-        log.info("result $result")
-        log.info("params: ${result.params}")
-    }
 
 //    @GetMapping("\${mocker.uuid}")
 //    fun getMapping(pageable: Pageable): Page<MockEntity> {
