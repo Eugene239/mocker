@@ -38,8 +38,8 @@ class MockEntity(
         var updated: Date? = null,
 
         @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY, orphanRemoval = true)
-        @JoinColumn(name = Param.MOCK_ID, referencedColumnName = ID)
-        var params: MutableList<Param> = ArrayList()
+        @JoinColumn(name = ParamEntity.MOCK_ID, referencedColumnName = ID)
+        var params: MutableList<ParamEntity> = ArrayList()
 ) {
 
 

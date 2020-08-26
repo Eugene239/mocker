@@ -7,16 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.core.annotation.Order
 import org.springframework.core.env.Environment
-import org.springframework.http.HttpMethod
-import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RestController
-import ru.epavlov.mocker.entity.MockEntity
-import ru.epavlov.mocker.entity.MockResponse
-import ru.epavlov.mocker.entity.Param
-import ru.epavlov.mocker.repository.MockRepository
-import javax.annotation.PostConstruct
 
 /**
  *       !WARNING!

@@ -3,13 +3,16 @@ package ru.epavlov.mocker.entity
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
+import org.springframework.http.HttpStatus
+import ru.epavlov.mocker.converter.HttpStatusConverter
 import java.util.*
 import javax.persistence.*
+import javax.validation.constraints.NotNull
 
 @Entity
-@Table(name = Param.TABLE_NAME)
+@Table(name = ParamEntity.TABLE_NAME)
 @EntityListeners(AuditingEntityListener::class)
-class Param(
+class ParamEntity(
         @Id
         @Column(name = ID)
         @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQUENCE_NAME)
@@ -20,6 +23,12 @@ class Param(
         @JoinColumn(name = MockResponse.ID)
         var response: MockResponse? = null,
 
+        @Convert(converter = HttpStatusConverter::class)
+        @Column(name = CODE, length = 7)
+        val code: @NotNull HttpStatus? = null,
+
+        @Column(name = DELAY)
+        val delay: Long? = null,
 
         @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY, orphanRemoval = true)
         @JoinColumn(name = ID, referencedColumnName = ID)
@@ -38,6 +47,8 @@ class Param(
         //const val RESPONSE_ID = "RESPONSE_ID"
         const val MOCK_ID = "MOCK_ID"
         const val ID = "PARAM_ID"
+        const val DELAY = "DELAY"
+        const val CODE = "CODE"
         const val SEQUENCE_NAME = "PARAM_SEQUENCE"
         const val TABLE_NAME = "PARAM"
     }

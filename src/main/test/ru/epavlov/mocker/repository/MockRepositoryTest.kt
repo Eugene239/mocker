@@ -87,12 +87,10 @@ class MockRepositoryTest {
                 method = method
         )
         val response = MockResponse(
-                code = HttpStatus.INTERNAL_SERVER_ERROR,
-                delay = 231213,
                 body = """{"hello":"test"}"""
         )
 
-        val paramV1= ParamValue(
+        val paramV1 = ParamValue(
                 type = ParamType.HEADER,
                 name = "Content-Type",
                 value = "text/plain"
@@ -100,37 +98,39 @@ class MockRepositoryTest {
         val paramV2 = ParamValue(
                 type = ParamType.QUERY_PARAM,
                 name = "sessionId",
-                value= "'2313-321312-311231'"
+                value = "'2313-321312-311231'"
         )
 
-        val param = Param(
+        val param = ParamEntity(
                 response = response,
-                values = mutableListOf(paramV1,paramV2)
+                values = mutableListOf(paramV1, paramV2),
+                code = HttpStatus.INTERNAL_SERVER_ERROR,
+                delay = 231213
         )
 
         mock.params = mutableListOf(param)
 
         var result = repository.save(mock)
 
-        assert(result.id!=null)
+        assert(result.id != null)
         assert(!result.params.isNullOrEmpty())
         assert(path == result.path)
         assert(method == result.method)
 
-        result.params.forEach { p->
-            assert(p.id!=null)
-            assert(p.response!=null)
-            assert(p.created!=null)
-            assert(p.updated!=null)
+        result.params.forEach { p ->
+            assert(p.id != null)
+            assert(p.response != null)
+            assert(p.created != null)
+            assert(p.updated != null)
             assert(!p.values.isNullOrEmpty())
 
-            p.values.forEach { v->
-                assert(v.id!=null)
-                assert(v.name!=null)
-                assert(v.value!=null)
-                assert(v.type!=null)
-                assert(v.created!=null)
-                assert(v.updated!=null)
+            p.values.forEach { v ->
+                assert(v.id != null)
+                assert(v.name != null)
+                assert(v.value != null)
+                assert(v.type != null)
+                assert(v.created != null)
+                assert(v.updated != null)
             }
         }
 
