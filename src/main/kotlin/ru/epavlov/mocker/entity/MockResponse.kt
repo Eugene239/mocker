@@ -10,24 +10,24 @@ import javax.persistence.*
 @Entity
 @Table(name = TABLE_NAME)
 @EntityListeners(AuditingEntityListener::class)
-class MockResponse(
+open class MockResponse(
 
         @Id
         @Column(name = ID)
         @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQUENCE_NAME)
         @SequenceGenerator(name = SEQUENCE_NAME, sequenceName = SEQUENCE_NAME, allocationSize = 1)
-        val id: Long? = null,
+        open var id: Long? = null,
 
-        @Column(name = BODY, length = 16387)
-        val body: String? = null, //todo make json and add converter
+        @Column(name = BODY, length = 65536, columnDefinition = "CLOB")
+        open var body: String? = null, //todo make json and add converter?
 
         @CreatedDate
         @Temporal(TemporalType.TIMESTAMP)
-        var created: Date? = null,
+        open var created: Date? = null,
 
         @LastModifiedDate
         @Temporal(TemporalType.TIMESTAMP)
-        var updated: Date? = null
+        open var updated: Date? = null
 ) {
     companion object {
         const val ID = "RESPONSE_ID"

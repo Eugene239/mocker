@@ -9,6 +9,6 @@ import ru.epavlov.mocker.entity.MockEntity
 interface MockRepository: PagingAndSortingRepository<MockEntity, Long> {
 
     // exist check
-    fun findAllByMethodAndPath(method: HttpMethod, path: String): List<MockEntity>
+    fun findAllByPathAndMethod(path: String, method: HttpMethod): MockEntity?
 }
 

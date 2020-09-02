@@ -5,8 +5,8 @@ import java.time.OffsetDateTime
 
 data class MockDTO(
         val id: Long? = null,
-        val path: String? = null,
-        val method: HttpMethod? = null,
-        var params: List<ParamsDTO>? = null,
-        val created: OffsetDateTime? = null
+        val path: String,
+        val method: HttpMethod,
+        var params: List<ParamsDTO> = emptyList(),
+        val created: OffsetDateTime = OffsetDateTime.now()
 )

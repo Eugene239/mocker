@@ -22,7 +22,9 @@ class MockConverterImpl : MockConverter {
 
     override fun convertWOResponse(entity: MockEntity): MockDTO {
         val dto = fillBaseInfo(entity)
-        dto.params = entity.params.map { convertWOResponse(it) }
+        dto.params = entity.params.map {
+            convertWOResponse(it)
+        }
         return dto
     }
 
@@ -76,7 +78,7 @@ class MockConverterImpl : MockConverter {
         return MockEntity(
                 path = dto.path,
                 method = dto.method,
-                params = dto.params?.map { toEntity(it) }?.toMutableList() ?: mutableListOf()
+                params = dto.params.map { toEntity(it) }.toMutableList()
         )
     }
 
@@ -85,7 +87,7 @@ class MockConverterImpl : MockConverter {
                 delay = dto.delay,
                 code = dto.code,
                 response = toEntity(dto.response),
-                values = dto.values?.map { toEntity(it) }?.toMutableList() ?: mutableListOf()
+                values = dto.values.map { toEntity(it) }.toMutableList()
         )
     }
 

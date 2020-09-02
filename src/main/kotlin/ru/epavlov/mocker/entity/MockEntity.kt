@@ -14,32 +14,32 @@ import javax.validation.constraints.NotNull
         uniqueConstraints = [UniqueConstraint(name = UQ_CONSTRAINT, columnNames = [MockEntity.PATH, MockEntity.METHOD])])
 @Entity
 @EntityListeners(AuditingEntityListener::class)
-class MockEntity(
+open class MockEntity(
 
         @Id
         @Column(name = ID)
         @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQUENCE_NAME)
         @SequenceGenerator(name = SEQUENCE_NAME, sequenceName = SEQUENCE_NAME, allocationSize = 1)
-        var id: Long? = null,
+        open var id: Long? = null,
 
         @Column(name = PATH, length = 255)
-        var path: @NotNull String? = null,
+        open var path: @NotNull String ,
 
         @Enumerated(EnumType.STRING)
         @Column(name = METHOD, length = 15)
-        var method: @NotNull HttpMethod? = null,
+        open var method: @NotNull HttpMethod,
 
         @CreatedDate
         @Temporal(TemporalType.TIMESTAMP)
-        var created: Date? = null,
+        open var created: Date? = null,
 
         @LastModifiedDate
         @Temporal(TemporalType.TIMESTAMP)
-        var updated: Date? = null,
+        open var updated: Date? = null,
 
         @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY, orphanRemoval = true)
         @JoinColumn(name = ParamEntity.MOCK_ID, referencedColumnName = ID)
-        var params: MutableList<ParamEntity> = ArrayList()
+        open var params: MutableList<ParamEntity> = ArrayList()
 ) {
 
 

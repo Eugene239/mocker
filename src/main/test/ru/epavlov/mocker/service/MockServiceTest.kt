@@ -7,30 +7,23 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.data.domain.Pageable
-import org.springframework.http.HttpMethod
-import org.springframework.http.HttpStatus
 import org.springframework.test.context.ActiveProfiles
+import ru.epavlov.mocker.BaseTest
 import ru.epavlov.mocker.MockerApplication
 import ru.epavlov.mocker.dto.MockDTO
-import ru.epavlov.mocker.dto.ParamValuesDTO
-import ru.epavlov.mocker.dto.ParamsDTO
-import ru.epavlov.mocker.dto.ResponseDTO
-import ru.epavlov.mocker.entity.ParamType
 import ru.epavlov.mocker.repository.MockRepository
-import java.util.*
-import kotlin.random.Random
 
 
 @SpringBootTest(classes = [MockerApplication::class])
 @ActiveProfiles(profiles = ["test"])
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
-class MockServiceTest {
+class MockServiceTest : BaseTest(){
     companion object {
         val log = LoggerFactory.getLogger(MockRepository::class.java)
 
     }
 
-    val methods = arrayOf(HttpMethod.POST, HttpMethod.DELETE, HttpMethod.GET, HttpMethod.PUT)
+
 
     @Autowired
     lateinit var service: MockService
@@ -39,45 +32,58 @@ class MockServiceTest {
     @Test
     @DisplayName("Check create in Service")
     fun checkCreate() {
-        val r1 = service.create(createMock())
+        var r1 = service.create(createMock())
         log.info("r1 created: $r1")
-        val r2 = service.create(createMock())
+        var r2 = service.create(createMock())
         log.info("r2 created: $r2")
         assert(2L == service.getMocks(Pageable.unpaged()).totalElements)
+        checkResponseIsNull(r1, true)
+        checkResponseIsNull(r2, true)
+
+        // checking response created
+        r1 = service.getMock(r1.id!!)!!
+        r2 = service.getMock(r2.id!!)!!
+        checkResponseIsNull(r1, true)
+        checkResponseIsNull(r2, true)
+    }
+
+    @Test
+    @DisplayName("Check find by queryParams")
+    fun checkFindByQueryParams() {
+//        var mock1 =
+//        var r1 = service.create(createMock())
+//        log.info("r1 created: $r1")
+//        var r2 = service.create(createMock())
+//        log.info("r2 created: $r2")
+//        assert(2L == service.getMocks(Pageable.unpaged()).totalElements)
+//        checkResponseIsNull(r1, true)
+//        checkResponseIsNull(r2, true)
+//
+//        // checking response created
+//        r1 = service.getMock(r1.id!!)!!
+//        r2 = service.getMock(r2.id!!)!!
+//        checkResponseIsNull(r1, true)
+//        checkResponseIsNull(r2, true)
+    }
+
+    @Test
+    @DisplayName("not found")
+    fun notFoundParamTest() {
+        val r1 = service.create(createMock())
+        log.info("r1 created: $r1")
+        val response =  service.getResponse(r1.path, r1.method, emptyMap(), emptyMap() )
+        assert(!r1.params.isNullOrEmpty())
+        assert(response == null)
     }
 
 
-    fun createMock(): MockDTO {
-
-
-        return MockDTO(
-                method = methods[Random.nextInt(methods.size)],
-                path = UUID.randomUUID().toString(),
-                params = IntRange(0, Random.nextInt(10)).map { createParam() }
-        )
+    fun checkResponseIsNull(dto: MockDTO, isNull: Boolean) {
+        dto.params.forEach {
+            if (isNull)
+                assert(it.response?.body == null)
+            else
+                assert(it.response?.body != null)
+        }
     }
 
-    fun createParam(): ParamsDTO {
-        return ParamsDTO(
-                values = IntRange(0, Random.nextInt(10)).map { createValue() },
-                response = createResponse(),
-                code = HttpStatus.values()[Random.nextInt(HttpStatus.values().size)],
-                delay = Random.nextInt(10000).toLong()
-
-        )
-    }
-
-    fun createValue(): ParamValuesDTO {
-        return ParamValuesDTO(
-                name = UUID.randomUUID().toString(),
-                value = UUID.randomUUID().toString(),
-                type = ParamType.QUERY_PARAM
-        )
-    }
-
-    fun createResponse(): ResponseDTO {
-        return ResponseDTO(
-                body = UUID.randomUUID().toString()
-        )
-    }
 }

@@ -4,7 +4,7 @@ import ru.epavlov.mocker.entity.ParamType
 
 data class ParamValuesDTO(
     val id: Long? = null,
-    val name: String? = null,
-    val type: ParamType? = null,
-    val value: String? = null
+    val name: String,
+    val type: ParamType,
+    val value: String
 )

@@ -12,35 +12,35 @@ import javax.validation.constraints.NotNull
 @Entity
 @Table(name = ParamEntity.TABLE_NAME)
 @EntityListeners(AuditingEntityListener::class)
-class ParamEntity(
+open class ParamEntity(
         @Id
         @Column(name = ID)
         @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQUENCE_NAME)
         @SequenceGenerator(name = SEQUENCE_NAME, sequenceName = SEQUENCE_NAME, allocationSize = 1)
-        var id: Long? = null,
+        open var id: Long? = null,
 
         @OneToOne(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
         @JoinColumn(name = MockResponse.ID)
-        var response: MockResponse? = null,
+        open var response: MockResponse? = null,
 
         @Convert(converter = HttpStatusConverter::class)
         @Column(name = CODE, length = 7)
-        val code: @NotNull HttpStatus? = null,
+        open var code: @NotNull HttpStatus = HttpStatus.OK,
 
         @Column(name = DELAY)
-        val delay: Long? = null,
+        open var delay: Long = 0,
 
         @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY, orphanRemoval = true)
         @JoinColumn(name = ID, referencedColumnName = ID)
-        var values : MutableList<ParamValue> = ArrayList(),
+        open var values : MutableList<ParamValue> = ArrayList(),
 
         @CreatedDate
         @Temporal(TemporalType.TIMESTAMP)
-        var created: Date? = null,
+        open var created: Date? = null,
 
         @LastModifiedDate
         @Temporal(TemporalType.TIMESTAMP)
-        var updated: Date? = null
+        open var updated: Date? = null
 
 ) {
     companion object {

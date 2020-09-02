@@ -10,6 +10,7 @@ import org.springframework.core.env.Environment
 import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RestController
+import javax.servlet.http.HttpServletRequest
 
 /**
  *       !WARNING!
@@ -104,10 +105,10 @@ class MockController {
 //
 //    @RequestMapping("/{prefix}/{main}/**")
 //    fun allMapping(
-//            @PathVariable("prefix") prefix: String,
-//            @PathVariable("main") main: String,
-//            request: HttpServletRequest,
-//            response: HttpServletResponse
+//        @PathVariable("prefix") prefix: String,
+//        @PathVariable("main") main: String,
+//        request: HttpServletRequest,
+//        response: HttpServletResponse
 //    ): ResponseEntity<Any> {
 //        if (log.isDebugEnabled) log.debug("[REQUEST] path=${request.requestURI}  method=${request.method} ")
 //        val mock = repository.findById(MockEntityId(request.requestURI.toLowerCase(), request.method.toUpperCase())).orElse(null)
