@@ -1,16 +1,22 @@
 package ru.epavlov.mocker.controller
 
-import com.fasterxml.jackson.databind.ObjectMapper
+import org.apache.tomcat.util.json.JSONParser
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.core.annotation.Order
 import org.springframework.core.env.Environment
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.CrossOrigin
+import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RestController
+import ru.epavlov.mocker.dto.MockRequest
+import ru.epavlov.mocker.exception.ExceptionFabric
+import ru.epavlov.mocker.service.MockService
 import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
 
 /**
  *       !WARNING!
@@ -23,7 +29,7 @@ import javax.servlet.http.HttpServletRequest
         allowedHeaders = ["*"],
         methods = [RequestMethod.GET, RequestMethod.PUT, RequestMethod.POST, RequestMethod.DELETE]
 )
-@Order(2)
+@Order(1)
 @RestController
 class MockController {
     //todo add swagger?
@@ -33,6 +39,7 @@ class MockController {
         const val ROOT = "/"
     }
 
+    // todo move to config
     @Value("\${mocker.uuid}")
     lateinit var uuid: String
 
@@ -41,18 +48,17 @@ class MockController {
 
     @Value("\${mocker.methods}")
     lateinit var methods: List<String>
-
+    //
 
     @Autowired
     lateinit var env: Environment
 
-
     @Autowired
-    lateinit var mapper: ObjectMapper
+    lateinit var service: MockService
 
 
 
-//    @GetMapping("\${mocker.uuid}")
+    //    @GetMapping("\${mocker.uuid}")
 //    fun getMapping(pageable: Pageable): Page<MockEntity> {
 //        return repository.findAll(pageable).map { it.body = null; it } // todo sql wo body
 //    }
@@ -103,31 +109,36 @@ class MockController {
 //        return ResponseEntity.ok().build();
 //    }
 //
-//    @RequestMapping("/{prefix}/{main}/**")
-//    fun allMapping(
-//        @PathVariable("prefix") prefix: String,
-//        @PathVariable("main") main: String,
-//        request: HttpServletRequest,
-//        response: HttpServletResponse
-//    ): ResponseEntity<Any> {
-//        if (log.isDebugEnabled) log.debug("[REQUEST] path=${request.requestURI}  method=${request.method} ")
-//        val mock = repository.findById(MockEntityId(request.requestURI.toLowerCase(), request.method.toUpperCase())).orElse(null)
-//        if (log.isDebugEnabled) log.debug("[RESPONSE] mock: $mock ")
-//
-//
-//        return if (mock == null) {
-//            ResponseEntity.notFound().build();
-//        } else {
-//            var responseBody: Any? = null;
-//            if (mock.body != null) {
-//                responseBody = JSONParser(mock.body).parse();
-//            }
-//
-//            ResponseEntity.status(mock.code ?: 200)
-//                    .body(responseBody)
-//        }
-//
-//    }
+    // @RequestMapping("/{prefix}/{main}/**")
+    @RequestMapping("/**")
+    @Order(1)
+    fun allMapping(
+            request: HttpServletRequest,
+            response: HttpServletResponse
+    ): ResponseEntity<Any> {
+        val start = System.currentTimeMillis()
+        if (log.isDebugEnabled) log.debug("[REQUEST] path=${request.requestURI}  method=${request.method} ")
+
+        val mockRequest = MockRequest.fromRequest(request)
+
+        val mock = service.getResponse(mockRequest)
+                ?: throw ExceptionFabric.mockNotFound(mockRequest.path, mockRequest.method)
+        if (log.isDebugEnabled) log.debug("[RESPONSE] mock: $mock ")
+
+        val responseBody = if (mock.response?.body != null) {
+            JSONParser(mock.response.body).parse()
+        } else {
+            null
+        }
+
+        //sleep some time
+        if (System.currentTimeMillis() - start < mock.delay) {
+            Thread.sleep(mock.delay - System.currentTimeMillis() + start)
+        }
+
+        return ResponseEntity.status(mock.code)
+                .body(responseBody)
+    }
 
 
 }

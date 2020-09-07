@@ -1,5 +1,7 @@
 package ru.epavlov.mocker
 
+import org.junit.jupiter.api.AfterEach
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import ru.epavlov.mocker.dto.MockDTO
@@ -7,12 +9,23 @@ import ru.epavlov.mocker.dto.ParamValuesDTO
 import ru.epavlov.mocker.dto.ParamsDTO
 import ru.epavlov.mocker.dto.ResponseDTO
 import ru.epavlov.mocker.entity.ParamType
+import ru.epavlov.mocker.repository.MockRepository
 import java.util.*
 import kotlin.collections.HashMap
 import kotlin.random.Random
 
 open class BaseTest {
     val methods = arrayOf(HttpMethod.POST, HttpMethod.DELETE, HttpMethod.GET, HttpMethod.PUT)
+
+
+    @Autowired
+    lateinit var repository: MockRepository
+
+
+    @AfterEach
+    protected fun cleanup() {
+        repository.deleteAll()
+    }
 
     fun createMock(): MockDTO {
         return MockDTO(

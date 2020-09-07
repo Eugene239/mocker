@@ -18,7 +18,7 @@ open class MockResponse(
         @SequenceGenerator(name = SEQUENCE_NAME, sequenceName = SEQUENCE_NAME, allocationSize = 1)
         open var id: Long? = null,
 
-        @Column(name = BODY, length = 65536, columnDefinition = "CLOB")
+        @Column(name = BODY, length = 16387)
         open var body: String? = null, //todo make json and add converter?
 
         @CreatedDate

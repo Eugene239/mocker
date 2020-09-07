@@ -12,10 +12,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.test.context.ActiveProfiles
 import ru.epavlov.mocker.BaseTest
 import ru.epavlov.mocker.MockerApplication
-import ru.epavlov.mocker.dto.MockDTO
-import ru.epavlov.mocker.dto.ParamValuesDTO
-import ru.epavlov.mocker.dto.ParamsDTO
-import ru.epavlov.mocker.dto.ResponseDTO
+import ru.epavlov.mocker.dto.*
 import ru.epavlov.mocker.entity.ParamType
 import ru.epavlov.mocker.repository.MockRepository
 import java.util.*
@@ -29,7 +26,6 @@ class MockServiceTest : BaseTest() {
         val log = LoggerFactory.getLogger(MockRepository::class.java)
 
     }
-
 
     @Autowired
     lateinit var service: MockService
@@ -58,7 +54,7 @@ class MockServiceTest : BaseTest() {
     fun checkFindByQueryParams() {
         val contactId = "123123-123123-3123"
         val sessionId = "2134-1424-142"
-        val response  = """{"test": "value"}"""
+        val response = """{"test": "value"}"""
         val path = "/check/method"
         val method = HttpMethod.GET
         val code = HttpStatus.OK
@@ -149,34 +145,34 @@ class MockServiceTest : BaseTest() {
                 method = method
 
         )
-       service.create(mock4)
+        service.create(mock4)
 
         val mock = MockDTO(
                 path = path,
                 params = listOf(ParamsDTO(
-                    code = code,
-                    delay = 0,
-                    response = ResponseDTO(
-                            body = response
-                    ),
-                        values = listOf(ParamValuesDTO(
-                               type = ParamType.QUERY_PARAM,
-                               name = "sessionId",
-                               value = sessionId
+                        code = code,
+                        delay = 0,
+                        response = ResponseDTO(
+                                body = response
                         ),
-                        ParamValuesDTO(
-                              type = ParamType.QUERY_PARAM,
-                                name = "contactId",
-                                value = contactId
-                        ))
+                        values = listOf(ParamValuesDTO(
+                                type = ParamType.QUERY_PARAM,
+                                name = "sessionId",
+                                value = sessionId
+                        ),
+                                ParamValuesDTO(
+                                        type = ParamType.QUERY_PARAM,
+                                        name = "contactId",
+                                        value = contactId
+                                ))
                 )),
                 method = method
 
         )
         var r1 = service.create(mock)
-        val found =  service.getResponse(path, method, mapOf("sessionId" to listOf(sessionId), "contactId" to listOf(contactId)) , emptyMap())
+        val found = service.getResponse(MockRequest(path, method, mapOf("sessionId" to listOf(sessionId), "contactId" to listOf(contactId)), emptyMap()))
         log.info("response $found")
-        assert(found!=null)
+        assert(found != null)
         assert(found?.response?.body == response)
         assert(found?.code == code)
     }
@@ -186,7 +182,7 @@ class MockServiceTest : BaseTest() {
     fun notFoundParamTest() {
         val r1 = service.create(createMock())
         log.info("r1 created: $r1")
-        val response = service.getResponse(r1.path, r1.method, emptyMap(), emptyMap())
+        val response = service.getResponse(MockRequest(r1.path, r1.method, emptyMap(), emptyMap()))
         assert(!r1.params.isNullOrEmpty())
         assert(response == null)
     }
@@ -196,7 +192,7 @@ class MockServiceTest : BaseTest() {
     fun notFoundParamTest2() {
         val contactId = "123123-123123-3123"
         val sessionId = "2134-1424-142"
-        val response  = """{"test": "value"}"""
+        val response = """{"test": "value"}"""
         val path = "/check/method"
         val method = HttpMethod.GET
         val code = HttpStatus.OK
@@ -224,9 +220,9 @@ class MockServiceTest : BaseTest() {
 
         )
         var r1 = service.create(mock)
-        var found =  service.getResponse(path, method, mapOf("sessionId" to listOf(UUID.randomUUID().toString()), "contactId" to listOf(contactId)) , emptyMap())
+        var found = service.getResponse(MockRequest(path, method, mapOf("sessionId" to listOf(UUID.randomUUID().toString()), "contactId" to listOf(contactId)), emptyMap()))
         assert(found == null)
-        found =  service.getResponse(path, method, mapOf("sessionId" to listOf(sessionId), "contactId" to listOf(UUID.randomUUID().toString())) , emptyMap())
+        found = service.getResponse(MockRequest(path, method, mapOf("sessionId" to listOf(sessionId), "contactId" to listOf(UUID.randomUUID().toString())), emptyMap()))
         assert(found == null)
     }
 
@@ -239,7 +235,6 @@ class MockServiceTest : BaseTest() {
                 assert(it.response?.body != null)
         }
     }
-
 
 
 }

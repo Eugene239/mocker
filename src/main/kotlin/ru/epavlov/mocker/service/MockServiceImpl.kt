@@ -4,13 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.crossstore.ChangeSetPersister
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
-import org.springframework.http.HttpMethod
 import org.springframework.stereotype.Service
 import ru.epavlov.mocker.converter.MockConverter
-import ru.epavlov.mocker.dto.MockDTO
-import ru.epavlov.mocker.dto.ParamValuesDTO
-import ru.epavlov.mocker.dto.ParamsDTO
-import ru.epavlov.mocker.dto.ResponseDTO
+import ru.epavlov.mocker.dto.*
 import ru.epavlov.mocker.entity.ParamType
 import ru.epavlov.mocker.repository.MockRepository
 import javax.transaction.Transactional
@@ -33,8 +29,8 @@ class MockServiceImpl(
     }
 
     @Transactional
-    override fun getResponse(path: String, method: HttpMethod, queryParams: Map<String, List<String>>, headers: Map<String, List<String>>): ParamsDTO? {
-        val mock = repository.findAllByPathAndMethod(path, method) ?: return null
+    override fun getResponse(request: MockRequest): ParamsDTO? {
+        val mock = repository.findAllByPathAndMethod(request.path, request.method) ?: return null
         val params = mock.params
         if (params.isNullOrEmpty()) return null
 
@@ -44,11 +40,11 @@ class MockServiceImpl(
             val values = param.values
             values.forEach values@{ value ->
                 if (ParamType.HEADER == value.type) {
-                    val header = headers[value.name] ?: emptyList()
+                    val header = request.headers[value.name] ?: emptyList()
                     if (!header.contains(value.value)) return@params
                 }
                 if (ParamType.QUERY_PARAM == value.type){
-                    val qParams = queryParams[value.name]?: emptyList()
+                    val qParams = request.queryParams[value.name]?: emptyList()
                     if (!qParams.contains(value.value)) return@params
                 }
             }
