@@ -5,7 +5,6 @@ import org.springframework.data.crossstore.ChangeSetPersister
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpMethod
-import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import ru.epavlov.mocker.converter.MockConverter
 import ru.epavlov.mocker.dto.MockDTO
@@ -42,10 +41,8 @@ class MockServiceImpl(
         var resultParam: ParamsDTO? = null
 
          params.forEach params@{param->
-             println("checkParam $param")
             val values = param.values
             values.forEach values@{ value ->
-                println("checkValue $value")
                 if (ParamType.HEADER == value.type) {
                     val header = headers[value.name] ?: emptyList()
                     if (!header.contains(value.value)) return@params
@@ -65,25 +62,33 @@ class MockServiceImpl(
     /**
      * Return information about mock without response data
      */
+    @Transactional
     override fun create(mock: MockDTO): MockDTO {
         var entity = converter.toEntity(mock)
+        val exists = repository.findAllByPathAndMethod(mock.path, mock.method)
+        if (exists != null) {
+            exists.params.addAll(entity.params)
+            entity = exists
+        }
         entity = repository.save(entity)
         return converter.convertWOResponse(entity)
     }
 
+    @Transactional // todo delete?
     override fun update(mock: MockDTO): MockDTO {
         TODO("Not yet implemented")
     }
-
-    override fun delete(param: ParamsDTO): MockDTO {
+    @Transactional
+    override fun delete(mockId: Long, param: ParamsDTO): MockDTO {
+       //  converter.toEntity(param)
         TODO("Not yet implemented")
     }
-
-    override fun delete(value: ParamValuesDTO): MockDTO {
+    @Transactional
+    override fun delete(mockId: Long, paramId: Long, value: ParamValuesDTO): MockDTO {
         TODO("Not yet implemented")
     }
-
-    override fun delete(response: ResponseDTO): MockDTO {
+    @Transactional
+    override fun delete(mockId: Long, paramId: Long, response: ResponseDTO): MockDTO {
         TODO("Not yet implemented")
     }
 
