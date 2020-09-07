@@ -1,10 +1,6 @@
 package ru.epavlov.mocker.filter
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.io.ClassPathResource
-import org.springframework.core.io.ResourceLoader
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 import javax.servlet.FilterChain
@@ -16,12 +12,6 @@ import javax.servlet.http.HttpServletResponse
  */
 @Component
 class ResourceFilter : OncePerRequestFilter() {
-    companion object {
-        val log: Logger = LoggerFactory.getLogger(ResourceFilter::class.java)
-    }
-
-    @Autowired
-    lateinit var resourceLoader: ResourceLoader
 
     override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, chain: FilterChain) {
         val resource = ClassPathResource("static/${request.requestURI}")
@@ -36,6 +26,4 @@ class ResourceFilter : OncePerRequestFilter() {
             chain.doFilter(request, response)
         }
     }
-
-
 }
