@@ -16,5 +16,7 @@ mocker:
   methods: GET,POST,PUT,PATCH
   uuid: a79c4bd8-d0e4-11ea-87d0-0242ac130003
   maxDelay: 5000
-  path:
-    regex: \/\S+\/\S+
+  pathRegex: \/\S+\/\S+
+  locale:
+    default: ru
+    available: ru, en
