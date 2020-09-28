@@ -28,6 +28,11 @@ class MockRepositoryTest {
     @Autowired
     lateinit var repository: MockRepository
 
+
+    @Autowired
+    lateinit var paramRepository: ParamRepository
+
+
     @AfterEach
     protected fun cleanup() {
         repository.deleteAll()
@@ -82,9 +87,56 @@ class MockRepositoryTest {
     fun createFull() {
         val path = "/test/path"
         val method = HttpMethod.POST
+        val mock = createMock(path, method)
+        var result = repository.save(mock)
+
+        assert(result.id != null)
+        assert(!result.params.isNullOrEmpty())
+        assert(path == result.path)
+        assert(method == result.method)
+
+        result.params.forEach { p ->
+            assert(p.id != null)
+            assert(p.response != null)
+            assert(p.created != null)
+            assert(p.updated != null)
+
+            p.values.forEach { v ->
+                assert(v.id != null)
+                assert(v.name != null)
+                assert(v.value != null)
+                assert(v.type != null)
+                assert(v.created != null)
+                assert(v.updated != null)
+            }
+        }
+
+
+    }
+
+
+    @Test
+    @DisplayName(" get param by Id")
+    fun checkParamById() {
+        val mock = createMock()
+        var result = repository.save(mock)
+
+        assert(result.id != null)
+        assert(!result.params.isNullOrEmpty())
+        result.params.forEach {
+            val param = paramRepository.findByIdAndMockId(it.id!!, result.id!!)
+            println("param= $it, ${it.mock!!.id}")
+            assert(param != null)
+            assert(param!!.id == it.id)
+            assert(result.id == it.mock!!.id)
+        }
+    }
+
+    fun createMock(path: String? = "/test/path", method: HttpMethod?=HttpMethod.POST): MockEntity{
+
         val mock = MockEntity(
-                path = path,
-                method = method
+                path = path!!,
+                method = method!!
         )
         val response = MockResponse(
                 body = """{"hello":"test"}"""
@@ -107,34 +159,19 @@ class MockRepositoryTest {
                 code = HttpStatus.INTERNAL_SERVER_ERROR,
                 delay = 231213
         )
+        val response2 = MockResponse(
+                body = """{"hello2":"test2"}"""
+        )
 
-        mock.params = mutableListOf(param)
+        val param2 = ParamEntity(
+                response = response2,
+                values = mutableListOf(),
+                code = HttpStatus.CREATED,
+                delay = 0L
+        )
 
-        var result = repository.save(mock)
-
-        assert(result.id != null)
-        assert(!result.params.isNullOrEmpty())
-        assert(path == result.path)
-        assert(method == result.method)
-
-        result.params.forEach { p ->
-            assert(p.id != null)
-            assert(p.response != null)
-            assert(p.created != null)
-            assert(p.updated != null)
-            assert(!p.values.isNullOrEmpty())
-
-            p.values.forEach { v ->
-                assert(v.id != null)
-                assert(v.name != null)
-                assert(v.value != null)
-                assert(v.type != null)
-                assert(v.created != null)
-                assert(v.updated != null)
-            }
-        }
-
-
+        mock.addParams(mutableListOf(param, param2))
+        return mock;
     }
 
 

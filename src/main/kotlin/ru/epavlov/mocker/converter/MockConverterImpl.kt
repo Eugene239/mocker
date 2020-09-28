@@ -76,7 +76,7 @@ class MockConverterImpl : MockConverter {
 
     override fun toEntity(dto: MockDTO): MockEntity {
         return MockEntity(
-                path = dto.path,
+                path = dto.path.toLowerCase(),
                 method = dto.method,
                 params = dto.params.map { toEntity(it) }.toMutableList()
         )
@@ -112,7 +112,7 @@ class MockConverterImpl : MockConverter {
     private fun fillBaseInfo(entity: MockEntity): MockDTO {
         return MockDTO(
                 id = entity.id,
-                path = entity.path,
+                path = entity.path.toLowerCase(),
                 method = entity.method,
                 created = OffsetDateTime.ofInstant(entity.created?.toInstant(), ZoneId.systemDefault())
         )

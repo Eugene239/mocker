@@ -9,7 +9,7 @@ import java.util.*
 import javax.persistence.*
 import javax.validation.constraints.NotNull
 
-@Entity
+@Entity(name = ParamEntity.TABLE_NAME)
 @Table(name = ParamEntity.TABLE_NAME)
 @EntityListeners(AuditingEntityListener::class)
 open class ParamEntity(
@@ -34,9 +34,14 @@ open class ParamEntity(
         @JoinColumn(name = ID, referencedColumnName = ID)
         open var values : MutableList<ParamValue> = ArrayList(),
 
+        @ManyToOne(fetch = FetchType.LAZY)
+        open var mock :  MockEntity? = null,
+
+
         @CreatedDate
         @Temporal(TemporalType.TIMESTAMP)
         open var created: Date? = null,
+
 
         @LastModifiedDate
         @Temporal(TemporalType.TIMESTAMP)

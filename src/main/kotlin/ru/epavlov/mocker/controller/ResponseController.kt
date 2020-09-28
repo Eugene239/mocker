@@ -42,7 +42,7 @@ class ResponseController {
         val mockRequest = MockRequest.fromRequest(request)
 
         val mock = service.getResponse(mockRequest)
-                ?: throw ExceptionFabric.mockNotFound(mockRequest.path, mockRequest.method)
+                ?: throw ExceptionFabric.mockNotFound()
         if (MockController.log.isDebugEnabled) MockController.log.debug("[RESPONSE] mock: $mock ")
 
         val responseBody = if (mock.response?.body != null) {

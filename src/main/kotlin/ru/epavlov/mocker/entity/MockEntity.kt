@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull
 
 @Table(name = TABLE_NAME,
         uniqueConstraints = [UniqueConstraint(name = UQ_CONSTRAINT, columnNames = [MockEntity.PATH, MockEntity.METHOD])])
-@Entity
+@Entity(name = TABLE_NAME)
 @EntityListeners(AuditingEntityListener::class)
 open class MockEntity(
 
@@ -50,5 +50,16 @@ open class MockEntity(
         const val TABLE_NAME = "MOCK"
         const val UQ_CONSTRAINT = "MOCK_ENTITY_UQ"
         const val SEQUENCE_NAME = "MOCK_SEQUENCE"
+    }
+
+    fun addParam(paramEntity: ParamEntity){
+        paramEntity.mock = this
+        this.params.add(paramEntity)
+    }
+
+    fun addParams(params: List<ParamEntity>){
+        params.forEach {
+            addParam(it)
+        }
     }
 }
