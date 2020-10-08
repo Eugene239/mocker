@@ -14,6 +14,8 @@ import org.springframework.http.HttpStatus
 import org.springframework.test.context.ActiveProfiles
 import ru.epavlov.mocker.MockerApplication
 import ru.epavlov.mocker.entity.*
+import ru.epavlov.mocker.exception.ExceptionFabric
+import javax.transaction.Transactional
 
 @SpringBootTest(classes = [MockerApplication::class])
 @ActiveProfiles(profiles = ["test"])
@@ -117,6 +119,7 @@ class MockRepositoryTest {
 
     @Test
     @DisplayName(" get param by Id")
+    @Transactional
     fun checkParamById() {
         val mock = createMock()
         var result = repository.save(mock)
@@ -124,11 +127,15 @@ class MockRepositoryTest {
         assert(result.id != null)
         assert(!result.params.isNullOrEmpty())
         result.params.forEach {
-            val param = paramRepository.findByIdAndMockId(it.id!!, result.id!!)
+            val param = paramRepository.findById(it.id!!).orElseThrow { throw ExceptionFabric.paramNotFound() }
             println("param= $it, ${it.mock!!.id}")
             assert(param != null)
             assert(param!!.id == it.id)
             assert(result.id == it.mock!!.id)
+            param.values.forEach {pv->
+                assert(pv.paramEntity!=null)
+                assert(pv.paramEntity!!.id == param.id)
+            }
         }
     }
 
@@ -155,10 +162,12 @@ class MockRepositoryTest {
 
         val param = ParamEntity(
                 response = response,
-                values = mutableListOf(paramV1, paramV2),
+                values = mutableListOf(),
                 code = HttpStatus.INTERNAL_SERVER_ERROR,
                 delay = 231213
-        )
+        ).apply {
+            this.addParamValues(mutableListOf(paramV1, paramV2))
+        }
         val response2 = MockResponse(
                 body = """{"hello2":"test2"}"""
         )

@@ -18,7 +18,7 @@ interface MockService {
 
     fun delete(mockId: Long, param: ParamsDTO): MockDTO
 
-    fun delete(mockId: Long, paramId: Long, value: ParamValuesDTO): MockDTO
+    fun delete(mockId: Long, paramId: Long, paramValueId: Long): MockDTO
 
     fun deleteResponse(mockId: Long, paramId: Long): MockDTO
 }

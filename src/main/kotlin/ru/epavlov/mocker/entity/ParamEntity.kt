@@ -62,4 +62,12 @@ open class ParamEntity(
         return "Param(id=$id)"
     }
 
+    fun addParamValue(paramValue: ParamValue){
+        paramValue.paramEntity = this
+        values.add(paramValue)
+    }
+
+    fun addParamValues(list: List<ParamValue>){
+        list.forEach { addParamValue(it) }
+    }
 }

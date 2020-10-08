@@ -3,23 +3,23 @@ package ru.epavlov.mocker.service
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.data.crossstore.ChangeSetPersister
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import ru.epavlov.mocker.converter.MockConverter
 import ru.epavlov.mocker.dto.*
-import ru.epavlov.mocker.entity.ParamEntity
 import ru.epavlov.mocker.entity.ParamType
 import ru.epavlov.mocker.exception.ExceptionFabric
 import ru.epavlov.mocker.repository.MockRepository
 import ru.epavlov.mocker.repository.ParamRepository
+import ru.epavlov.mocker.repository.ParamValueRepository
 import javax.transaction.Transactional
 
 @Service
 class MockServiceImpl(
         @Autowired val repository: MockRepository,
         @Autowired val paramRepository: ParamRepository,
+        @Autowired val paramValueRepository: ParamValueRepository,
         @Autowired val converter: MockConverter
 ) : MockService {
 
@@ -34,7 +34,7 @@ class MockServiceImpl(
     @Transactional
     @Throws
     override fun getMock(id: Long): MockDTO? {
-        val mock = repository.findById(id).orElseThrow { ChangeSetPersister.NotFoundException() }
+        val mock = repository.findById(id).orElseThrow { throw ExceptionFabric.mockNotFound() }
         return converter.convertWOResponse(mock)
     }
 
@@ -89,25 +89,35 @@ class MockServiceImpl(
     override fun delete(mockId: Long, param: ParamsDTO): MockDTO {
         log.info("delete param($mockId, $param)")
         val paramId = param.id ?: throw ExceptionFabric.IdRequired();
-        val paramEntity = paramRepository.findByIdAndMockId(paramId, mockId)?: throw ExceptionFabric.paramNotFound()
+        val paramEntity = paramRepository.findById(paramId).orElseThrow {  throw ExceptionFabric.paramNotFound()}
         var mock = paramEntity.mock?: throw ExceptionFabric.mockNotFound()
+        if (mockId != mock.id) throw ExceptionFabric.wrongMockId()
         mock.params.remove(paramEntity)
         mock = repository.save(mock)
         return converter.convertWOResponse(mock)
     }
 
     @Transactional
-    override fun delete(mockId: Long, paramId: Long, value: ParamValuesDTO): MockDTO {
-        TODO("Not yet implemented")
+    override fun delete(mockId: Long, paramId: Long, paramValueId: Long): MockDTO {
+        log.info("delete paramValue($mockId, $paramId, $paramValueId)")
+        val paramValue = paramValueRepository.findById(paramValueId).orElseThrow { throw ExceptionFabric.paramValueNotFound() }
+        val paramEntity = paramValue.paramEntity ?: throw ExceptionFabric.paramNotFound()
+        if (paramEntity.id != paramId) throw ExceptionFabric.wrongMockId()
+        val mock = paramEntity.mock ?: throw ExceptionFabric.mockNotFound()
+        if (mockId != mock.id) throw ExceptionFabric.wrongMockId()
+        paramEntity.values.remove(paramValue)
+        paramRepository.save(paramEntity)
+        return getMock(mockId)!!
     }
 
     @Transactional
     override fun deleteResponse(mockId: Long, paramId: Long): MockDTO {
         log.info("delete response($mockId, $paramId");
-        var paramEntity = paramRepository.findByIdAndMockId(paramId, mockId) ?: throw ExceptionFabric.paramNotFound()
+        val paramEntity = paramRepository.findById(paramId).orElseThrow { throw ExceptionFabric.paramNotFound() }
+        if (paramEntity.mock?.id != mockId) throw ExceptionFabric.wrongMockId()
         paramEntity.response = null
-        paramEntity = paramRepository.save(paramEntity)
-        return converter.convertWOResponse(paramEntity.mock!!)
+        paramRepository.save(paramEntity)
+        return getMock(mockId)!!
     }
 
 }

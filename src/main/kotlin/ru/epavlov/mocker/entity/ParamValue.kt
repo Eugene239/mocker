@@ -29,6 +29,8 @@ open class ParamValue(
         @Column(name = VALUE, length = 255)
         open var value: @NotNull String ,
 
+        @ManyToOne(fetch = FetchType.LAZY)
+        open var paramEntity: ParamEntity? = null,
 
         @CreatedDate
         @Temporal(TemporalType.TIMESTAMP)

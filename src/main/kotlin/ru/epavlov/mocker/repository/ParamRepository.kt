@@ -5,5 +5,4 @@ import ru.epavlov.mocker.entity.ParamEntity
 
 interface ParamRepository: CrudRepository<ParamEntity, Long>{
 
-     fun findByIdAndMockId(id: Long, mockId: Long): ParamEntity?
 }
