@@ -1,6 +1,8 @@
 package ru.epavlov.mocker.controller
 
 import org.apache.tomcat.util.json.JSONParser
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.annotation.Order
 import org.springframework.http.ResponseEntity
@@ -24,6 +26,10 @@ import kotlin.math.min
 @Order(100)
 @RestController
 class ResponseController {
+    companion object {
+        val log: Logger = LoggerFactory.getLogger(ResponseController::class.java)
+        const val ROOT = "/"
+    }
 
     @Autowired
     lateinit var service: MockService
@@ -37,13 +43,13 @@ class ResponseController {
     fun allMapping(request: HttpServletRequest, response: HttpServletResponse
     ): ResponseEntity<Any> {
         val start = System.currentTimeMillis()
-        if (MockController.log.isDebugEnabled) MockController.log.debug("[REQUEST] path=${request.requestURI}  method=${request.method} ")
+        if (log.isDebugEnabled) log.debug("[REQUEST] path=${request.requestURI}  method=${request.method} ")
 
         val mockRequest = MockRequest.fromRequest(request)
 
         val mock = service.getResponse(mockRequest)
                 ?: throw ExceptionFabric.mockNotFound()
-        if (MockController.log.isDebugEnabled) MockController.log.debug("[RESPONSE] mock: $mock ")
+        if (log.isDebugEnabled) log.debug("[RESPONSE] mock: $mock ")
 
         val responseBody = if (mock.response?.body != null) {
             JSONParser(mock.response.body).parse()
