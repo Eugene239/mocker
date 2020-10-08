@@ -1,6 +1,6 @@
 module.exports = {
 
-    outputDir: '../src/main/resources/static',
+    outputDir: '../mocker-server/src/main/resources/static',
     css: {
         extract: {
             filename: '[name]-[hash].css',
