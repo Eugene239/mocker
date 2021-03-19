@@ -4,6 +4,7 @@
 
     <modelVersion>4.0.0</modelVersion>
 
+    <groupId>ru.epavlov</groupId>
     <artifactId>mocker-api</artifactId>
     <version>0.0.1</version>
     <packaging>jar</packaging>
@@ -11,11 +12,15 @@
     <name>ru.epavlov mocker-api</name>
 
     <parent>
-        <groupId>ru.epavlov</groupId>
-        <artifactId>mocker</artifactId>
-        <version>0.0.1</version>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.2.4.RELEASE</version>
+        <relativePath />
     </parent>
 
+    <properties>
+        <swagger.version>2.9.2</swagger.version>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -28,6 +33,16 @@
             <artifactId>kotlin-test-junit</artifactId>
             <version>${kotlin.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${swagger.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
