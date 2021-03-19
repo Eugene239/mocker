@@ -10,12 +10,12 @@ import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.ActiveProfiles
-import ru.epavlov.mocker.BaseTest
-import ru.epavlov.mocker.MockerApplication
-import ru.epavlov.mocker.api.dto.MockRequest
-import ru.epavlov.mocker.dto.*
-import ru.epavlov.mocker.dto.ParamType
-import ru.epavlov.mocker.repository.MockRepository
+import ru.epavlov.mocker.api.dto.*
+import ru.epavlov.mocker.server.BaseTest
+import ru.epavlov.mocker.server.MockerApplication
+import ru.epavlov.mocker.server.api.dto.MockRequest
+import ru.epavlov.mocker.server.repository.MockRepository
+
 import java.util.*
 
 
@@ -64,7 +64,7 @@ class MockServiceTest : BaseTest() {
         val mock1 = MockDTO(
                 path = path,
                 params = listOf(ParamsDTO(
-                        code = code,
+                        code = code.value(),
                         delay = 0,
                         response = ResponseDTO(
                                 body = "nope"
@@ -80,7 +80,7 @@ class MockServiceTest : BaseTest() {
                                         value = contactId
                                 ))
                 )),
-                method = HttpMethod.POST
+                method = HttpMethod.POST.name
 
         )
         service.create(mock1)
@@ -88,7 +88,7 @@ class MockServiceTest : BaseTest() {
         val mock2 = MockDTO(
                 path = path,
                 params = listOf(ParamsDTO(
-                        code = code,
+                        code = code.value(),
                         delay = 0,
                         response = ResponseDTO(
                                 body = "nope"
@@ -104,7 +104,7 @@ class MockServiceTest : BaseTest() {
                                         value = "wrong"
                                 ))
                 )),
-                method = method
+                method = method.name
 
         )
         service.create(mock2)
@@ -112,14 +112,14 @@ class MockServiceTest : BaseTest() {
         val mock3 = MockDTO(
                 path = path,
                 params = listOf(ParamsDTO(
-                        code = code,
+                        code = code.value(),
                         delay = 0,
                         response = ResponseDTO(
                                 body = "nope"
                         ),
                         values = listOf()
                 )),
-                method = method
+                method = method.name
 
         )
         service.create(mock3)
@@ -127,7 +127,7 @@ class MockServiceTest : BaseTest() {
         val mock4 = MockDTO(
                 path = path,
                 params = listOf(ParamsDTO(
-                        code = code,
+                        code = code.value(),
                         delay = 0,
                         response = ResponseDTO(
                                 body = response
@@ -143,7 +143,7 @@ class MockServiceTest : BaseTest() {
                                         value = contactId
                                 ))
                 )),
-                method = method
+                method = method.name
 
         )
         service.create(mock4)
@@ -151,7 +151,7 @@ class MockServiceTest : BaseTest() {
         val mock = MockDTO(
                 path = path,
                 params = listOf(ParamsDTO(
-                        code = code,
+                        code = code.value(),
                         delay = 0,
                         response = ResponseDTO(
                                 body = response
@@ -167,7 +167,7 @@ class MockServiceTest : BaseTest() {
                                         value = contactId
                                 ))
                 )),
-                method = method
+                method = method.name
 
         )
         var r1 = service.create(mock)
@@ -182,7 +182,7 @@ class MockServiceTest : BaseTest() {
         log.info("response $found")
         assert(found != null)
         assert(found?.response?.body == response)
-        assert(found?.code == code)
+        assert(found?.code == code.value())
     }
 
     @Test
@@ -193,7 +193,7 @@ class MockServiceTest : BaseTest() {
         val response = service.getResponse(
             MockRequest(
                 r1.path,
-                r1.method,
+                HttpMethod.resolve(r1.method)!!,
                 emptyMap(),
                 emptyMap()
             )
@@ -215,7 +215,7 @@ class MockServiceTest : BaseTest() {
         val mock = MockDTO(
                 path = path,
                 params = listOf(ParamsDTO(
-                        code = code,
+                        code = code.value(),
                         delay = 0,
                         response = ResponseDTO(
                                 body = response
@@ -231,7 +231,7 @@ class MockServiceTest : BaseTest() {
                                         value = contactId
                                 ))
                 )),
-                method = method
+                method = method.name
 
         )
         var r1 = service.create(mock)

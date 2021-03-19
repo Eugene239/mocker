@@ -3,7 +3,7 @@ package ru.epavlov.mocker.server.entity
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
-import ru.epavlov.mocker.entity.MockResponse.Companion.TABLE_NAME
+import ru.epavlov.mocker.server.entity.MockResponse.Companion.TABLE_NAME
 import java.util.*
 import javax.persistence.*
 

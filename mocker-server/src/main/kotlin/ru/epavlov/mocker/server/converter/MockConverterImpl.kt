@@ -1,14 +1,11 @@
 package ru.epavlov.mocker.server.converter
 
+import org.springframework.http.HttpMethod
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
-import ru.epavlov.mocker.dto.MockDTO
-import ru.epavlov.mocker.dto.ParamValuesDTO
-import ru.epavlov.mocker.dto.ParamsDTO
-import ru.epavlov.mocker.dto.ResponseDTO
-import ru.epavlov.mocker.entity.MockEntity
-import ru.epavlov.mocker.entity.MockResponse
-import ru.epavlov.mocker.entity.ParamEntity
-import ru.epavlov.mocker.entity.ParamValue
+import ru.epavlov.mocker.api.dto.*
+import ru.epavlov.mocker.server.entity.*
+
 import java.time.OffsetDateTime
 import java.time.ZoneId
 
@@ -32,7 +29,7 @@ class MockConverterImpl : MockConverter {
         return ParamsDTO(
                 id = entity.id,
                 delay = entity.delay,
-                code = entity.code,
+                code = entity.code.value(),
                 values = entity.values.map { toDTO(it) }
         )
     }
@@ -50,7 +47,7 @@ class MockConverterImpl : MockConverter {
                 id = entity.id,
                 response = toDTO(entity.response),
                 delay = entity.delay,
-                code = entity.code,
+                code = entity.code.value(),
                 values = entity.values.map { toDTO(it) }
         )
     }
@@ -77,7 +74,7 @@ class MockConverterImpl : MockConverter {
     override fun toEntity(dto: MockDTO): MockEntity {
         return MockEntity(
                 path = dto.path.toLowerCase(),
-                method = dto.method,
+                method = HttpMethod.valueOf(dto.method),
                 params = dto.params.map { toEntity(it) }.toMutableList()
         )
     }
@@ -85,7 +82,7 @@ class MockConverterImpl : MockConverter {
     override fun toEntity(dto: ParamsDTO): ParamEntity {
         return ParamEntity(
                 delay = dto.delay,
-                code = dto.code,
+                code = HttpStatus.valueOf(dto.code), // todo handle error
                 response = toEntity(dto.response),
                 values = dto.values.map { toEntity(it) }.toMutableList()
         )
@@ -113,7 +110,7 @@ class MockConverterImpl : MockConverter {
         return MockDTO(
                 id = entity.id,
                 path = entity.path.toLowerCase(),
-                method = entity.method,
+                method = entity.method.name,
                 created = OffsetDateTime.ofInstant(entity.created?.toInstant(), ZoneId.systemDefault())
         )
     }

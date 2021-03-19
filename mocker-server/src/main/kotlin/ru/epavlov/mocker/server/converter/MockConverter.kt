@@ -1,13 +1,8 @@
 package ru.epavlov.mocker.server.converter
 
-import ru.epavlov.mocker.dto.MockDTO
-import ru.epavlov.mocker.dto.ParamValuesDTO
-import ru.epavlov.mocker.dto.ParamsDTO
-import ru.epavlov.mocker.dto.ResponseDTO
-import ru.epavlov.mocker.entity.MockEntity
-import ru.epavlov.mocker.entity.MockResponse
-import ru.epavlov.mocker.entity.ParamEntity
-import ru.epavlov.mocker.entity.ParamValue
+import ru.epavlov.mocker.api.dto.*
+import ru.epavlov.mocker.server.entity.*
+
 
 interface MockConverter {
 

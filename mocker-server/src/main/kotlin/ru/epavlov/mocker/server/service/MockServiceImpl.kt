@@ -7,22 +7,22 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpMethod
 import org.springframework.stereotype.Service
-import ru.epavlov.mocker.api.dto.MockRequest
-import ru.epavlov.mocker.converter.MockConverter
-import ru.epavlov.mocker.dto.*
-import ru.epavlov.mocker.dto.ParamType
-import ru.epavlov.mocker.exception.ExceptionFabric
-import ru.epavlov.mocker.repository.MockRepository
-import ru.epavlov.mocker.repository.ParamRepository
-import ru.epavlov.mocker.repository.ParamValueRepository
+import ru.epavlov.mocker.api.dto.*
+import ru.epavlov.mocker.server.api.dto.MockRequest
+import ru.epavlov.mocker.server.converter.MockConverter
+import ru.epavlov.mocker.server.exception.ExceptionFabric
+import ru.epavlov.mocker.server.repository.MockRepository
+import ru.epavlov.mocker.server.repository.ParamRepository
+import ru.epavlov.mocker.server.repository.ParamValueRepository
+
 import javax.transaction.Transactional
 
 @Service
 class MockServiceImpl(
-        @Autowired val repository: MockRepository,
-        @Autowired val paramRepository: ParamRepository,
-        @Autowired val paramValueRepository: ParamValueRepository,
-        @Autowired val converter: MockConverter
+    @Autowired val repository: MockRepository,
+    @Autowired val paramRepository: ParamRepository,
+    @Autowired val paramValueRepository: ParamValueRepository,
+    @Autowired val converter: MockConverter
 ) : MockService {
 
     companion object{

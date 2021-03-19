@@ -4,7 +4,7 @@ import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import org.springframework.http.HttpStatus
-import ru.epavlov.mocker.converter.HttpStatusConverter
+import ru.epavlov.mocker.server.converter.HttpStatusConverter
 import java.util.*
 import javax.persistence.*
 import javax.validation.constraints.NotNull

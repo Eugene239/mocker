@@ -3,7 +3,7 @@ package ru.epavlov.mocker.server.controller
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver
-import ru.epavlov.mocker.config.MockConfig
+import ru.epavlov.mocker.server.config.MockConfig
 import java.util.*
 
 

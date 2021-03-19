@@ -4,8 +4,8 @@ import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import org.springframework.http.HttpMethod
-import ru.epavlov.mocker.entity.MockEntity.Companion.TABLE_NAME
-import ru.epavlov.mocker.entity.MockEntity.Companion.UQ_CONSTRAINT
+import ru.epavlov.mocker.server.entity.MockEntity.Companion.UQ_CONSTRAINT
+import ru.epavlov.mocker.server.entity.MockEntity.Companion.TABLE_NAME
 import java.util.*
 import javax.persistence.*
 import javax.validation.constraints.NotNull
