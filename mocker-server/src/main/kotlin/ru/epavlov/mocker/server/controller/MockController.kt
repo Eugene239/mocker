@@ -23,7 +23,8 @@ import javax.annotation.PostConstruct
         methods = [RequestMethod.GET, RequestMethod.PUT, RequestMethod.POST, RequestMethod.DELETE]
 )
 @Order(1)
-@RestController
+//@RestController
+@Deprecated("old, just use swagger")
 class MockController {
     companion object {
         val log: Logger = LoggerFactory.getLogger(MockController::class.java)

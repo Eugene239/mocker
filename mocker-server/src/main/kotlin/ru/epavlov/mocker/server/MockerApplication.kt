@@ -6,8 +6,12 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing
 
 @SpringBootApplication
 @EnableJpaAuditing
-class MockerApplication  {}
+class MockerApplication {
 
-fun main(args: Array<String>) {
-    runApplication<MockerApplication>(*args)
+    companion object {
+        @JvmStatic
+        fun main(args: Array<String>) {
+            runApplication<MockerApplication>(*args)
+        }
+    }
 }

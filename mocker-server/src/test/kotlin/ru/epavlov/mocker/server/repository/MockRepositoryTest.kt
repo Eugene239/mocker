@@ -12,10 +12,13 @@ import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.ActiveProfiles
-import ru.epavlov.mocker.MockerApplication
-import ru.epavlov.mocker.dto.ParamType
-import ru.epavlov.mocker.entity.*
-import ru.epavlov.mocker.exception.ExceptionFabric
+import ru.epavlov.mocker.api.dto.ParamType
+import ru.epavlov.mocker.server.MockerApplication
+import ru.epavlov.mocker.server.entity.MockEntity
+import ru.epavlov.mocker.server.entity.MockResponse
+import ru.epavlov.mocker.server.entity.ParamEntity
+import ru.epavlov.mocker.server.entity.ParamValue
+import ru.epavlov.mocker.server.exception.ExceptionFabric
 import javax.transaction.Transactional
 
 @SpringBootTest(classes = [MockerApplication::class])
@@ -44,10 +47,12 @@ class MockRepositoryTest {
     @Test
     @DisplayName("Check create in DB")
     fun checkCreate() {
-        val result = repository.save(MockEntity(
+        val result = repository.save(
+            MockEntity(
                 path = "/test/path",
                 method = HttpMethod.GET
-        ))
+        )
+        )
         log.info("create result: $result")
         assert(result.id != null)
         assert(result.created != null)

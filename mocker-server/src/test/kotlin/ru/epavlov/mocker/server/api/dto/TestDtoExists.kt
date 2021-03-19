@@ -2,13 +2,13 @@ package ru.epavlov.mocker.server.api.dto
 
 import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
-import ru.epavlov.mocker.repository.MockRepository
+import ru.epavlov.mocker.api.dto.*
 
 
 class TestDtoExists {
 
     companion object {
-        val log = LoggerFactory.getLogger(MockRepository::class.java)
+        val log = LoggerFactory.getLogger(TestDtoExists::class.java)
     }
 
     @Test

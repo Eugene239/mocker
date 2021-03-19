@@ -4,18 +4,14 @@ import org.junit.jupiter.api.AfterEach
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
-import ru.epavlov.mocker.dto.MockDTO
-import ru.epavlov.mocker.dto.ParamValuesDTO
-import ru.epavlov.mocker.dto.ParamsDTO
-import ru.epavlov.mocker.dto.ResponseDTO
-import ru.epavlov.mocker.dto.ParamType
-import ru.epavlov.mocker.repository.MockRepository
+import ru.epavlov.mocker.api.dto.*
+import ru.epavlov.mocker.server.repository.MockRepository
 import java.util.*
 import kotlin.collections.HashMap
 import kotlin.random.Random
 
 open class BaseTest {
-    val methods = arrayOf(HttpMethod.POST, HttpMethod.DELETE, HttpMethod.GET, HttpMethod.PUT)
+    val methods = arrayOf(HttpMethod.POST, HttpMethod.DELETE, HttpMethod.GET, HttpMethod.PUT).map { it.name }
 
 
     @Autowired
@@ -39,7 +35,7 @@ open class BaseTest {
         return ParamsDTO(
                 values = IntRange(0, Random.nextInt(10)).map { createValue() },
                 response = createResponse(),
-                code = HttpStatus.values()[Random.nextInt(HttpStatus.values().size)],
+                code = HttpStatus.values()[Random.nextInt(HttpStatus.values().size)].value(),
                 delay = Random.nextInt(10000).toLong()
 
         )

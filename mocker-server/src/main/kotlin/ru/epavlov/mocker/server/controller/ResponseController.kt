@@ -25,7 +25,8 @@ import kotlin.math.min
         methods = [RequestMethod.GET, RequestMethod.PUT, RequestMethod.POST, RequestMethod.DELETE]
 )
 @Order(100)
-@RestController
+//@RestController
+@Deprecated("not needed now")
 class ResponseController {
     companion object {
         val log: Logger = LoggerFactory.getLogger(ResponseController::class.java)
