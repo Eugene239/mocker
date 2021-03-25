@@ -20,3 +20,5 @@ mocker:
   locale:
     default: ru
     available: ru, en
+
+logging.level.ru.epavlov.mocker: debug
