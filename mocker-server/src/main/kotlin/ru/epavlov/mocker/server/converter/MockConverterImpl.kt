@@ -75,7 +75,7 @@ class MockConverterImpl : MockConverter {
         return MockEntity(
                 path = dto.path.toLowerCase(),
                 method = HttpMethod.valueOf(dto.method),
-                params = dto.params.map { toEntity(it) }.toMutableList()
+                params = dto.params?.map { toEntity(it) }?.toMutableList() ?: mutableListOf()
         )
     }
 
@@ -84,7 +84,7 @@ class MockConverterImpl : MockConverter {
                 delay = dto.delay,
                 code = HttpStatus.valueOf(dto.code), // todo handle error
                 response = toEntity(dto.response),
-                values = dto.values.map { toEntity(it) }.toMutableList()
+                values = dto.values?.map { toEntity(it) }?.toMutableList() ?: mutableListOf()
         )
     }
 

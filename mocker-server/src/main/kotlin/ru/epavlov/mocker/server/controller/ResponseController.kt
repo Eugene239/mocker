@@ -24,9 +24,8 @@ import kotlin.math.min
         allowedHeaders = ["*"],
         methods = [RequestMethod.GET, RequestMethod.PUT, RequestMethod.POST, RequestMethod.DELETE]
 )
-@Order(100)
-//@RestController
-@Deprecated("not needed now")
+@Order(2147483647)
+//@RestController todo move to filter
 class ResponseController {
     companion object {
         val log: Logger = LoggerFactory.getLogger(ResponseController::class.java)

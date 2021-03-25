@@ -58,7 +58,7 @@ open class BaseTest {
     fun toMaps(params: ParamsDTO): Pair<Map<String, List<String>> /*headers*/, Map<String, List<String>>/* qParams*/> {
         val headerMap = HashMap<String, List<String>>()
         val qMap  = HashMap<String,List<String>>()
-        params.values.forEach {pValue ->
+        params.values?.forEach {pValue ->
             if (ParamType.QUERY_PARAM ==  pValue.type){
                 qMap.plus(pValue.name to pValue.value)
             }

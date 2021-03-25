@@ -257,7 +257,7 @@ class MockServiceTest : BaseTest() {
 
 
     fun checkResponseIsNull(dto: MockDTO, isNull: Boolean) {
-        dto.params.forEach {
+        dto.params?.forEach {
             if (isNull)
                 assert(it.response?.body == null)
             else

@@ -11,6 +11,8 @@ data class PageResponse<T>(
     val pageSize: Int,
     @ApiModelProperty(value = "Current pageNumber")
     val pageNumber: Int,
+    @ApiModelProperty(value = "Total pages")
+    val totalPages: Int,
     @ApiModelProperty(value = "Total amount of elements")
-    val total: Int
+    val total: Long
 )

@@ -16,7 +16,15 @@ interface MockController {
     fun getMocks(
         @ApiParam(value = "Search request", required = false)
         @RequestBody
-        searchCriteria: SearchCriteria): PageResponse<MockDTO>
+        searchCriteria: SearchCriteria
+    ): PageResponse<MockDTO>
 
 
+    @ApiOperation(value = "Create Mock")
+    @PostMapping("/create")
+    fun createMock(
+        @ApiParam(value = "Mock object", required = true)
+        @RequestBody
+        mockDTO: MockDTO
+    ): MockDTO
 }
