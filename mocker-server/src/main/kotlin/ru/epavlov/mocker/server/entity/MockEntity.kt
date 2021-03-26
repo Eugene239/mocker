@@ -26,7 +26,7 @@ open class MockEntity(
         open var path: @NotNull String ,
 
         @Enumerated(EnumType.STRING)
-        @Column(name = METHOD, length = 15)
+        @Column(name = METHOD, length = 15) // todo move method to param
         open var method: @NotNull HttpMethod,
 
         @CreatedDate
